@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# clawcast-website
 
-## Getting Started
+Marketing site for [ClawCast](https://github.com/TheAntelope) — a personal
+podcast made from the news and writers you follow. Built with Next.js (App
+Router, TypeScript) and styled directly off the brand's shared design tokens.
 
-First, run the development server:
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone --recurse-submodules https://github.com/TheAntelope/clawcast-website.git
+cd clawcast-website
+npm install
+npm run dev   # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+If you forgot `--recurse-submodules`, run `git submodule update --init`
+afterwards. Without the submodule, `globals.css` can't import the design
+tokens and the build fails.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where the styling comes from
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`design-tokens/` is a git submodule pointing at
+[`TheAntelope/clawcast-tokens`](https://github.com/TheAntelope/clawcast-tokens).
+That repo is the single source of truth for ClawCast's palette, spacing,
+radii, and typography — it's also consumed by the iOS app, so brand changes
+flow into both surfaces by editing one `tokens.json`.
 
-## Learn More
+The website pulls them in via:
 
-To learn more about Next.js, take a look at the following resources:
+```css
+/* src/app/globals.css */
+@import "../../design-tokens/dist/tokens.css";
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Every brand value is then a CSS variable: `var(--color-amber)`,
+`var(--spacing-l)`, `var(--typography-display-font-family)`, etc.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Bumping tokens
 
-## Deploy on Vercel
+1. Open the design-tokens submodule (`cd design-tokens`).
+2. Edit `tokens.json`, run `npm run build` (regenerates `dist/tokens.css`).
+3. Commit + push from inside the submodule (lands in `clawcast-tokens`).
+4. Back in the website root, `git add design-tokens` to bump the submodule
+   pointer, then commit. The next deploy picks up the new values.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Currently un-deployed. Static export works (`npm run build` produces a fully
+static site), so any of Vercel / Netlify / Cloudflare Pages will work when
+you're ready.
