@@ -1,66 +1,95 @@
-import Image from "next/image";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+      <header className={styles.header}>
+        <div className={`${styles.container} ${styles.headerInner}`}>
+          <span className={styles.brand}>ClawCast</span>
+          <a href="#how" className={styles.navLink}>
+            How it works
           </a>
         </div>
+      </header>
+
+      <main>
+        <section className={styles.hero}>
+          <div className={styles.container}>
+            <div className={styles.eyebrow}>Your daily briefing, made for you</div>
+            <h1 className={styles.heroHeadline}>
+              Your own podcast, made from the news you actually follow.
+            </h1>
+            <p className={styles.heroSub}>
+              Pick the topics and writers you care about. ClawCast turns them into a short
+              podcast, hosted by AI voices, and lands a fresh episode in Apple Podcasts on
+              the days you choose.
+            </p>
+            <div className={styles.heroActions}>
+              <a className={styles.btnPrimary} href="#waitlist">
+                Join the beta
+              </a>
+              <a className={styles.btnSecondary} href="#how">
+                See how it works
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <div className={styles.divider} />
+
+        <section className={styles.section} id="how">
+          <div className={styles.container}>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionHeadline}>Three steps to your show.</h2>
+              <p className={styles.sectionLead}>
+                Setup takes a couple of minutes. After that you don&rsquo;t need to open the
+                app — episodes show up wherever you already listen.
+              </p>
+            </div>
+
+            <div className={styles.steps}>
+              <article className={styles.step}>
+                <div className={styles.stepNumber}>1</div>
+                <h3 className={styles.stepTitle}>Choose your sources</h3>
+                <p className={styles.stepBody}>
+                  Pick from curated topic bundles or paste in your own RSS feeds. After
+                  setup, you also get an email address for subscribing to newsletters that
+                  flow straight into your podcast.
+                </p>
+              </article>
+
+              <article className={styles.step}>
+                <div className={styles.stepNumber}>2</div>
+                <h3 className={styles.stepTitle}>Pick the hosts</h3>
+                <p className={styles.stepBody}>
+                  Choose one or two AI voices to read and riff on the day&rsquo;s items.
+                  Anchor leads each segment, commentator chimes in. Change either anytime.
+                </p>
+              </article>
+
+              <article className={styles.step}>
+                <div className={styles.stepNumber}>3</div>
+                <h3 className={styles.stepTitle}>Listen in Apple Podcasts</h3>
+                <p className={styles.stepBody}>
+                  A private feed lands on the days you choose, at the time you choose, in
+                  your timezone. No new app to open — just listen.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
       </main>
+
+      <footer className={styles.footer}>
+        <div className={`${styles.container} ${styles.footerInner}`}>
+          <span>&copy; {new Date().getFullYear()} ClawCast</span>
+          <nav className={styles.footerLinks}>
+            <a href="mailto:hello@theclawcast.com">Contact</a>
+            <a href="#privacy">Privacy</a>
+            <a href="#terms">Terms</a>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }
