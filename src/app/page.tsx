@@ -25,7 +25,10 @@ export default function Home() {
               the days you choose.
             </p>
             <div className={styles.heroActions}>
-              <a className={styles.btnPrimary} href="#waitlist">
+              <a
+                className={styles.btnPrimary}
+                href="mailto:hello@theclawcast.com?subject=Join%20the%20ClawCast%20beta"
+              >
                 Join the beta
               </a>
               <a className={styles.btnSecondary} href="#how">
