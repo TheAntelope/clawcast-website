@@ -1,0 +1,115 @@
+.heroNote {
+  margin-top: var(--spacing-m);
+  font-family: var(--typography-meta-font-family);
+  font-size: var(--typography-meta-font-size);
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+
+.statRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-l);
+}
+
+.stat {
+  background: #ffffff;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-l);
+  text-align: left;
+}
+
+.statValue {
+  font-family: var(--typography-display-font-family);
+  font-size: clamp(32px, 4vw, 48px);
+  color: var(--color-amber-deep);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.statLabel {
+  margin-top: var(--spacing-s);
+  color: var(--color-ink-soft);
+  font-size: 15px;
+}
+
+.flowList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+}
+
+.flow {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: var(--spacing-l);
+  align-items: start;
+  background: #ffffff;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-l);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.flowNumber {
+  font-family: var(--typography-display-font-family);
+  font-size: 36px;
+  color: var(--color-amber-deep);
+  line-height: 1;
+}
+
+.flowTitle {
+  font-family: var(--typography-subtitle-font-family);
+  font-size: var(--typography-subtitle-font-size);
+  font-weight: var(--typography-subtitle-font-weight);
+  color: var(--color-ink);
+  margin-bottom: 6px;
+}
+
+.flowBody {
+  color: var(--color-ink-soft);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-m);
+}
+
+.faqItem {
+  background: #ffffff;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-l);
+}
+
+.faqQ {
+  font-family: var(--typography-subtitle-font-family);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.faqA {
+  margin-top: var(--spacing-s);
+  color: var(--color-ink-soft);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.ctaBlock {
+  margin-top: clamp(32px, 4vw, 48px);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-m);
+  flex-wrap: wrap;
+}
+
+.ctaNote {
+  color: var(--color-muted);
+  font-size: 14px;
+}
