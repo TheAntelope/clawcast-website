@@ -40,11 +40,19 @@ Every brand value is then a CSS variable: `var(--color-amber)`,
 1. Open the design-tokens submodule (`cd design-tokens`).
 2. Edit `tokens.json`, run `npm run build` (regenerates `dist/tokens.css`).
 3. Commit + push from inside the submodule (lands in `clawcast-tokens`).
-4. Back in the website root, `git add design-tokens` to bump the submodule
-   pointer, then commit. The next deploy picks up the new values.
+
+That's it — the website's [`bump-tokens`](.github/workflows/bump-tokens.yml)
+workflow runs hourly (08:00–23:00 UTC), notices the new `dist/tokens.css`,
+fast-forwards the submodule pointer on `main`, and Vercel deploys. For an
+instant bump, run the workflow manually from the Actions tab (or `gh
+workflow run bump-tokens.yml`) instead of waiting for the next hour.
+
+If you'd rather bump by hand: from the website root, `git add design-tokens
+&& git commit && git push`. Vercel picks it up the same way.
 
 ## Deployment
 
-Currently un-deployed. Static export works (`npm run build` produces a fully
-static site), so any of Vercel / Netlify / Cloudflare Pages will work when
-you're ready.
+Hosted on Vercel — pushes to `main` trigger production deploys, PRs get
+preview URLs. The live site is [theclawcast.com](https://theclawcast.com)
+(canonical is `www`; the apex 307-redirects to it). DNS is at GoDaddy;
+Vercel handles certs.
