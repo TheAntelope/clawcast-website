@@ -1,0 +1,64 @@
+name: Bump design-tokens
+
+on:
+  schedule:
+    # Hourly, 08:00–23:00 UTC (~01:00–16:00 Pacific). Skips overnight to save Actions minutes.
+    - cron: "0 8-23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Check if dist/tokens.css changed upstream
+        id: check
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd design-tokens
+          OLD_SHA=$(git rev-parse HEAD)
+          git fetch origin main
+          NEW_SHA=$(git rev-parse origin/main)
+
+          if [ "$OLD_SHA" = "$NEW_SHA" ]; then
+            echo "Already at tip of upstream main ($OLD_SHA)."
+            echo "should_bump=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if git diff --quiet "$OLD_SHA" "$NEW_SHA" -- dist/tokens.css; then
+            echo "Upstream has new commits but dist/tokens.css unchanged — skipping bump."
+            echo "should_bump=false" >> "$GITHUB_OUTPUT"
+          else
+            SHORT_SHA=$(git rev-parse --short "$NEW_SHA")
+            SUBJECT=$(git log -1 --format=%s "$NEW_SHA")
+            echo "should_bump=true" >> "$GITHUB_OUTPUT"
+            echo "new_sha=$NEW_SHA" >> "$GITHUB_OUTPUT"
+            echo "short_sha=$SHORT_SHA" >> "$GITHUB_OUTPUT"
+            echo "subject=$SUBJECT" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump submodule pointer and push
+        if: steps.check.outputs.should_bump == 'true'
+        shell: bash
+        env:
+          NEW_SHA: ${{ steps.check.outputs.new_sha }}
+          SHORT_SHA: ${{ steps.check.outputs.short_sha }}
+          SUBJECT: ${{ steps.check.outputs.subject }}
+        run: |
+          set -euo pipefail
+          cd design-tokens
+          git checkout "$NEW_SHA"
+          cd ..
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add design-tokens
+          git commit -m "Bump design-tokens to $SHORT_SHA: $SUBJECT"
+          git push
