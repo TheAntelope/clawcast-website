@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ClawCast for creators",
     description:
-      "Your posts, in your voice, on every podcast app — automatically. A new distribution channel for Substackers and bloggers.",
+      "Your posts, in your voice, in Apple Podcasts — automatically. A new distribution channel for Substackers and bloggers.",
     type: "website",
   },
 };
@@ -29,12 +29,13 @@ export default function Creators() {
           <div className={shell.container}>
             <div className={shell.eyebrow}>For creators · Pilot</div>
             <h1 className={shell.heroHeadline}>
-              Your Substack, in your voice, on every podcast app.
+              Your Substack, in your voice, in Apple Podcasts.
             </h1>
             <p className={shell.heroSub}>
               Hit publish like you always do. ClawCast takes your post, narrates it in a
-              voice clone of you, and ships it to Apple Podcasts, Spotify, and the rest —
+              voice clone of you, and ships it to Apple Podcasts as a five-minute episode —
               automatically. A second distribution channel that costs you zero extra effort.
+              Spotify and other players are on the way.
             </p>
             <div className={shell.heroActions}>
               <a className={shell.btnPrimary} href={pilotMailto}>
@@ -131,8 +132,9 @@ export default function Creators() {
                   <h3 className={styles.flowTitle}>You approve, we publish</h3>
                   <p className={styles.flowBody}>
                     Get a one-tap preview link by email. Approve it, or skip it. Approved
-                    episodes ship to Apple Podcasts, Spotify, Overcast, and your own embedded
-                    player.
+                    episodes ship to Apple Podcasts today — Spotify, Overcast, and an
+                    embeddable player are on the roadmap, and pilot writers get a vote on
+                    what we add next.
                   </p>
                 </div>
               </li>

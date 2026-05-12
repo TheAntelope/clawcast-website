@@ -70,8 +70,9 @@ export default function Home() {
                 <div className={styles.stepNumber}>3</div>
                 <h3 className={styles.stepTitle}>Listen in Apple Podcasts</h3>
                 <p className={styles.stepBody}>
-                  A private feed lands on the days you choose, at the time you choose, in
-                  your timezone. No new app to open — just listen.
+                  A five-minute episode lands in a private feed on the days you choose, in
+                  your timezone. Apple Podcasts only for now — other players are on the
+                  roadmap.
                 </p>
               </article>
             </div>

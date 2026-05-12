@@ -107,8 +107,8 @@ export default function About() {
               <li className={styles.belief}>
                 <h3 className={styles.beliefTitle}>Short is a feature.</h3>
                 <p className={styles.beliefBody}>
-                  Most episodes should be under 15 minutes. We measure success in episodes
-                  finished, not minutes streamed.
+                  Episodes are five minutes. We measure success in episodes finished, not
+                  minutes streamed.
                 </p>
               </li>
             </ul>

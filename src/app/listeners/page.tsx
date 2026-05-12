@@ -78,17 +78,19 @@ export default function Listeners() {
                 </p>
               </li>
               <li className={styles.feature}>
-                <h3 className={styles.featureTitle}>Short by default</h3>
+                <h3 className={styles.featureTitle}>Five minutes, on purpose</h3>
                 <p className={styles.featureBody}>
-                  Most episodes are 8–15 minutes. Headlines, the actual reporting underneath,
-                  and what to read in full if you want to go deeper. No 90-minute marathons.
+                  Every episode is about five minutes. Headlines, the actual reporting
+                  underneath, and what to read in full if you want to go deeper. Short enough
+                  to finish on the way to the office.
                 </p>
               </li>
               <li className={styles.feature}>
-                <h3 className={styles.featureTitle}>Plays where you already listen</h3>
+                <h3 className={styles.featureTitle}>Plays in Apple Podcasts</h3>
                 <p className={styles.featureBody}>
-                  Your show is a private podcast feed. Apple Podcasts, Overcast, Pocket
-                  Casts, anything that takes a URL. No new app to keep open.
+                  Your show is a private feed in Apple Podcasts — no new app to keep open.
+                  Spotify, Overcast, and Pocket Casts are on the roadmap; tell us which one
+                  to ship next.
                 </p>
               </li>
               <li className={styles.feature}>
@@ -128,15 +130,15 @@ export default function Listeners() {
                 <ul className={styles.fitList}>
                   <li>You subscribe to more newsletters than you read.</li>
                   <li>You commute, walk, run, or do dishes a lot.</li>
-                  <li>You have an iPhone and use Apple Podcasts or a podcast player.</li>
+                  <li>You have an iPhone and listen in Apple Podcasts.</li>
                   <li>You&rsquo;ll tell us when something sounds wrong.</li>
                 </ul>
               </div>
               <div className={styles.fit}>
                 <h3 className={styles.fitTitle}>Probably not yet if&hellip;</h3>
                 <ul className={styles.fitList}>
+                  <li>You listen in Spotify, Overcast, or Pocket Casts — those are next.</li>
                   <li>You need an Android app — that&rsquo;s coming later.</li>
-                  <li>You only listen on desktop or a smart speaker.</li>
                   <li>You want fully human-hosted shows. Ours are AI hosts.</li>
                 </ul>
               </div>
