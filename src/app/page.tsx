@@ -1,50 +1,46 @@
+import { SiteFooter } from "./_components/SiteFooter";
+import { SiteHeader } from "./_components/SiteHeader";
+import shell from "./_styles/shell.module.css";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <div className={`${styles.container} ${styles.headerInner}`}>
-          <span className={styles.brand}>ClawCast</span>
-          <a href="#how" className={styles.navLink}>
-            How it works
-          </a>
-        </div>
-      </header>
+    <div className={shell.page}>
+      <SiteHeader active="home" />
 
       <main>
-        <section className={styles.hero}>
-          <div className={styles.container}>
-            <div className={styles.eyebrow}>Your daily briefing, made for you</div>
-            <h1 className={styles.heroHeadline}>
+        <section className={shell.hero}>
+          <div className={shell.container}>
+            <div className={shell.eyebrow}>Your daily briefing, made for you</div>
+            <h1 className={shell.heroHeadline}>
               Your own podcast, made from the news you actually follow.
             </h1>
-            <p className={styles.heroSub}>
+            <p className={shell.heroSub}>
               Pick the topics and writers you care about. ClawCast turns them into a short
               podcast, hosted by AI voices, and lands a fresh episode in Apple Podcasts on
               the days you choose.
             </p>
-            <div className={styles.heroActions}>
+            <div className={shell.heroActions}>
               <a
-                className={styles.btnPrimary}
+                className={shell.btnPrimary}
                 href="mailto:hello@theclawcast.com?subject=Join%20the%20ClawCast%20beta"
               >
                 Join the beta
               </a>
-              <a className={styles.btnSecondary} href="#how">
+              <a className={shell.btnSecondary} href="#how">
                 See how it works
               </a>
             </div>
           </div>
         </section>
 
-        <div className={styles.divider} />
+        <div className={shell.divider} />
 
-        <section className={styles.section} id="how">
-          <div className={styles.container}>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionHeadline}>Three steps to your show.</h2>
-              <p className={styles.sectionLead}>
+        <section className={shell.section} id="how">
+          <div className={shell.container}>
+            <div className={shell.sectionHeader}>
+              <h2 className={shell.sectionHeadline}>Three steps to your show.</h2>
+              <p className={shell.sectionLead}>
                 Setup takes a couple of minutes. After that you don&rsquo;t need to open the
                 app — episodes show up wherever you already listen.
               </p>
@@ -83,16 +79,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className={styles.footer}>
-        <div className={`${styles.container} ${styles.footerInner}`}>
-          <span>&copy; {new Date().getFullYear()} ClawCast</span>
-          <nav className={styles.footerLinks}>
-            <a href="mailto:hello@theclawcast.com">Contact</a>
-            <a href="#privacy">Privacy</a>
-            <a href="#terms">Terms</a>
-          </nav>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
