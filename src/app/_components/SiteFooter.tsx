@@ -9,6 +9,7 @@ export function SiteFooter() {
         <nav className={styles.footerLinks} aria-label="Footer">
           <Link href="/listeners">For listeners</Link>
           <Link href="/creators">For creators</Link>
+          <Link href="/roadmap">Roadmap</Link>
           <Link href="/about">About</Link>
           <a href="mailto:hello@theclawcast.com">Contact</a>
         </nav>

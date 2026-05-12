@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SiteFooter } from "./_components/SiteFooter";
 import { SiteHeader } from "./_components/SiteHeader";
 import shell from "./_styles/shell.module.css";
@@ -71,8 +72,8 @@ export default function Home() {
                 <h3 className={styles.stepTitle}>Listen in Apple Podcasts</h3>
                 <p className={styles.stepBody}>
                   A five-minute episode lands in a private feed on the days you choose, in
-                  your timezone. Apple Podcasts only for now — other players are on the
-                  roadmap.
+                  your timezone. Apple Podcasts only for now — other players are on{" "}
+                  <Link href="/roadmap">the roadmap</Link>.
                 </p>
               </article>
             </div>

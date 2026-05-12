@@ -6,10 +6,15 @@ type NavLink = { href: string; label: string };
 const navLinks: NavLink[] = [
   { href: "/listeners", label: "For listeners" },
   { href: "/creators", label: "For creators" },
+  { href: "/roadmap", label: "Roadmap" },
   { href: "/about", label: "About" },
 ];
 
-export function SiteHeader({ active }: { active?: "home" | "listeners" | "creators" | "about" }) {
+export function SiteHeader({
+  active,
+}: {
+  active?: "home" | "listeners" | "creators" | "roadmap" | "about";
+}) {
   return (
     <header className={styles.header}>
       <div className={`${styles.container} ${styles.headerInner}`}>
@@ -18,7 +23,11 @@ export function SiteHeader({ active }: { active?: "home" | "listeners" | "creato
         </Link>
         <nav className={styles.nav} aria-label="Primary">
           {navLinks.map((link) => {
-            const key = link.href.replace("/", "") as "listeners" | "creators" | "about";
+            const key = link.href.replace("/", "") as
+              | "listeners"
+              | "creators"
+              | "roadmap"
+              | "about";
             const isActive = active === key;
             return (
               <Link
