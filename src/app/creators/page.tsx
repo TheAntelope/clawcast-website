@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
+const pilotStart = "/creators/start";
 const pilotMailto =
   "mailto:hello@theclawcast.com?subject=ClawCast%20creator%20pilot&body=Hi%20—%20I%20write%20at%20[link]%20and%20I%27d%20like%20to%20be%20part%20of%20the%20ClawCast%20creator%20pilot.";
 
@@ -38,8 +39,8 @@ export default function Creators() {
               Spotify and other players are on the way.
             </p>
             <div className={shell.heroActions}>
-              <a className={shell.btnPrimary} href={pilotMailto}>
-                Join the creator pilot
+              <a className={shell.btnPrimary} href={pilotStart}>
+                Set up your show
               </a>
               <a className={shell.btnSecondary} href="#how-it-works">
                 How it works
@@ -190,10 +191,14 @@ export default function Creators() {
             </dl>
 
             <div className={styles.ctaBlock}>
-              <a className={shell.btnPrimary} href={pilotMailto}>
-                Join the creator pilot
+              <a className={shell.btnPrimary} href={pilotStart}>
+                Set up your show
               </a>
-              <span className={styles.ctaNote}>Send a link to your newsletter — that&rsquo;s all we need.</span>
+              <span className={styles.ctaNote}>
+                Three steps — voice clone, Substack URL, channels. Or{" "}
+                <a href={pilotMailto}>email us</a> if you&rsquo;d rather start
+                over chat.
+              </span>
             </div>
           </div>
         </section>
