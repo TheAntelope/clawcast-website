@@ -1,0 +1,107 @@
+.lastUpdated {
+  margin-top: var(--spacing-m);
+  font-family: var(--typography-meta-font-family);
+  font-size: var(--typography-meta-font-size);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.prose {
+  max-width: 68ch;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+  color: var(--color-ink-soft);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.prose h2 {
+  font-family: var(--typography-subtitle-font-family);
+  font-size: clamp(22px, 2.6vw, 28px);
+  font-weight: var(--typography-subtitle-font-weight);
+  color: var(--color-ink);
+  margin-top: var(--spacing-l);
+}
+
+.prose h3 {
+  font-family: var(--typography-subtitle-font-family);
+  font-size: 19px;
+  font-weight: var(--typography-subtitle-font-weight);
+  color: var(--color-ink);
+  margin-top: var(--spacing-m);
+}
+
+.prose p {
+  margin: 0;
+}
+
+.prose ul {
+  margin: 0;
+  padding-left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prose li {
+  padding-left: 4px;
+}
+
+.prose a {
+  color: var(--color-amber-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  color: var(--color-amber);
+}
+
+.prose strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.tldr {
+  background: #ffffff;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-l);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.tldr h2 {
+  margin-top: 0;
+}
+
+.subprocessorTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.subprocessorTable th,
+.subprocessorTable td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-rule);
+  vertical-align: top;
+}
+
+.subprocessorTable th {
+  font-family: var(--typography-meta-font-family);
+  font-size: var(--typography-meta-font-size);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.subprocessorTable td:first-child {
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: nowrap;
+}

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "ClawCast — your own podcast, made from the news you actually follow",
   description:
     "ClawCast turns the news and writers you actually follow into a short daily podcast, hosted by AI voices. Pick your sources, choose the hosts, and a new episode lands in Apple Podcasts on your schedule.",
-  metadataBase: new URL("https://clawcast.com"),
+  metadataBase: new URL("https://theclawcast.com"),
   openGraph: {
     title: "ClawCast",
     description:
