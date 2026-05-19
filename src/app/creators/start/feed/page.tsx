@@ -3,6 +3,7 @@ import { readCreatorState } from "@/lib/creator-state";
 import { Stepper } from "../Stepper";
 import styles from "../wizard.module.css";
 import { FeedForm } from "./FeedForm";
+import { PreviewLatest } from "./PreviewLatest";
 
 export default async function FeedPage() {
   const state = await readCreatorState();
@@ -42,6 +43,23 @@ export default async function FeedPage() {
 
         <FeedForm defaultUrl={state.substack?.url} />
       </section>
+
+      {state.substack && state.voice ? (
+        <section className={styles.card}>
+          <h2 className={styles.cardTitle}>Try it on your latest post</h2>
+          <p className={styles.cardBody}>
+            Before you wait for the next newsletter, let&rsquo;s render the most
+            recent post into an episode. It lands in our feed at{" "}
+            <code>/podcast.xml</code> — the same URL we&rsquo;ll submit to
+            Spotify once the ClawCast show is set up.
+          </p>
+          <PreviewLatest
+            feedTitle={state.substack.title ?? state.substack.url}
+            voiceName={state.voice.name}
+            autoStart={!state.substack.firstEpisodeAt}
+          />
+        </section>
+      ) : null}
     </>
   );
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { SPOTIFY_SHOW_URL } from "@/lib/clawcast";
 import { readCreatorState } from "@/lib/creator-state";
 import { resetWizard } from "../actions";
 import { Stepper } from "../Stepper";
@@ -26,10 +27,9 @@ export default async function DonePage() {
           {state.substack.title ?? "Your newsletter"} is in the queue.
         </h1>
         <p className={styles.lead}>
-          ClawCast will check your feed within the hour. The first new post
-          renders into a five-minute episode in your voice and lands in the
-          ClawCast Spotify show — we&rsquo;ll email a preview link before it
-          goes public.
+          ClawCast polls your feed once a day. Each new post renders into a
+          five-minute episode in your voice and lands in our public RSS feed,
+          which the shared ClawCast Spotify show pulls from automatically.
         </p>
       </header>
 
@@ -46,6 +46,11 @@ export default async function DonePage() {
             <dd className={styles.summaryValue}>
               <span>{state.voice.name}</span>
               <span className={styles.code}>{state.voice.id}</span>
+              {state.voice.kind === "premium" ? (
+                <span className={styles.summaryValueMuted}>
+                  Premium ElevenLabs voice — no clone, just a preset ID.
+                </span>
+              ) : null}
               {state.voice.mock ? (
                 <span className={styles.summaryValueMuted}>
                   Placeholder ID — re-run with <code>ELEVENLABS_API_KEY</code>{" "}
@@ -76,19 +81,37 @@ export default async function DonePage() {
         <h2 className={styles.cardTitle}>What happens next</h2>
         <ul className={styles.cardBody} style={{ paddingLeft: 18 }}>
           <li>
-            We poll your feed every couple of hours and queue new public posts
-            for narration.
+            A cron job polls your feed daily and renders new posts in{" "}
+            {state.voice.kind === "premium"
+              ? "your selected voice"
+              : "your cloned voice"}
+            .
           </li>
           <li>
-            Each episode renders in your cloned voice with a clean intro and
-            outro and ships to the shared Spotify show.
+            Episodes append to our public feed at{" "}
+            <Link href="/podcast.xml" target="_blank">
+              /podcast.xml
+            </Link>
+            .
           </li>
           <li>
-            You&rsquo;ll get a preview email before the first episode goes
-            live — reply with edits or a thumbs up.
+            The shared ClawCast Spotify show pulls from that feed —{" "}
+            <a href={SPOTIFY_SHOW_URL} target="_blank" rel="noreferrer">
+              listen here
+            </a>
+            . Spotify usually picks up new episodes within a few hours of its
+            next pull.
           </li>
         </ul>
         <div className={styles.actions}>
+          <a
+            href={SPOTIFY_SHOW_URL}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.btnPrimary}
+          >
+            Open ClawCast on Spotify
+          </a>
           <Link href="/creators" className={styles.btnSecondary}>
             Back to creators page
           </Link>

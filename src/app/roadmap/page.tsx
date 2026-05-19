@@ -7,11 +7,11 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "Roadmap — ClawCast",
   description:
-    "What ClawCast is shipping in the next three weeks, day by day. TestFlight, a hardened backend, and a swipe-based recommender.",
+    "What ClawCast is shipping in the next three weeks, day by day — plus the parallel work on theclawcast.com for creators and listeners.",
   openGraph: {
     title: "ClawCast roadmap",
     description:
-      "What ClawCast is shipping in the next three weeks, day by day.",
+      "Three weeks of iOS + backend work, plus the website to-do list for creators and listeners.",
     type: "website",
   },
 };
@@ -23,6 +23,13 @@ type Week = {
   theme: string;
   lead: string;
   milestones: Milestone[];
+};
+type Track = {
+  label: string;
+  audience: string;
+  theme: string;
+  lead: string;
+  items: Milestone[];
 };
 
 const weeks: Week[] = [
@@ -122,6 +129,65 @@ const weeks: Week[] = [
   },
 ];
 
+const tracks: Track[] = [
+  {
+    label: "Website",
+    audience: "For creators",
+    theme: "Make signups land somewhere real.",
+    lead: "The wizard at /creators/start works, but completed signups sit in a cookie on the visitor's browser. The team never sees them. These items close that loop.",
+    items: [
+      {
+        days: "Now",
+        title: "Notify on new signups",
+        body: "Email hello@theclawcast.com whenever a creator finishes the wizard, with the voice ID, feed URL, and channel choice. Until this ships, submissions are effectively lost.",
+      },
+      {
+        days: "Next",
+        title: "Apple + Google sign-in",
+        body: "Replace the cookie-only wizard state with real accounts. A creator can pause, switch devices, and resume — and we get a stable server-side record of who's signed up.",
+      },
+      {
+        days: "Next",
+        title: "Admin view of pending creators",
+        body: "Authenticated list of completed signups, newest first, with the voice, feed, and channels each one picked. Internal-only for the pilot.",
+      },
+      {
+        days: "Later",
+        title: "Email preview before publishing",
+        body: "The wizard's done page promises a preview email before the first episode goes public. Build the approval loop that backs that promise.",
+      },
+    ],
+  },
+  {
+    label: "Website",
+    audience: "For listeners",
+    theme: "Make the listener page do more than describe.",
+    lead: "Today /listeners is a pitch with a mailto. These items turn it into a place where prospective listeners can hear the product and tell us what to build next.",
+    items: [
+      {
+        days: "Now",
+        title: "Sample episode on /listeners",
+        body: "Embed a five-minute pilot episode so visitors can hear what ClawCast sounds like before applying. Plain HTML5 audio is enough.",
+      },
+      {
+        days: "Now",
+        title: "Vote on the next platform",
+        body: "Small form on /listeners letting beta applicants pick the platform we ship next — Spotify, Overcast, or Pocket Casts. Tally feeds the iOS roadmap.",
+      },
+      {
+        days: "Next",
+        title: "App Store CTA",
+        body: "Once TestFlight opens to public testers, swap the mailto 'Apply for the beta' button on /listeners for a direct App Store / TestFlight link.",
+      },
+      {
+        days: "Later",
+        title: "Public creator pages",
+        body: "Per-writer URLs (theclawcast.com/c/handle) listing recent episodes — shareable, indexable, the page a creator points their readers at.",
+      },
+    ],
+  },
+];
+
 const scrubber = [
   { label: "Today", sub: "Kickoff" },
   { label: "Day 7", sub: "TestFlight live" },
@@ -199,6 +265,49 @@ export default function Roadmap() {
                         <span className={styles.milestoneDays}>{m.days}</span>
                         <h3 className={styles.milestoneTitle}>{m.title}</h3>
                         <p className={styles.milestoneText}>{m.body}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className={shell.divider} />
+
+        <section className={shell.section}>
+          <div className={shell.container}>
+            <div className={shell.sectionHeader}>
+              <h2 className={shell.sectionHeadline}>
+                On the website, in parallel.
+              </h2>
+              <p className={shell.sectionLead}>
+                The three weeks above are the iOS app and its backend.
+                Here&rsquo;s the to-do list for this site — split by audience,
+                because the creator and listener surfaces have very different
+                next steps.
+              </p>
+            </div>
+
+            <div className={styles.weekGrid}>
+              {tracks.map((track) => (
+                <article key={track.audience} className={styles.week}>
+                  <header className={styles.weekHeader}>
+                    <div className={styles.weekMeta}>
+                      <span className={styles.weekLabel}>{track.label}</span>
+                      <span className={styles.weekRange}>{track.audience}</span>
+                    </div>
+                  </header>
+                  <h3 className={styles.weekTheme}>{track.theme}</h3>
+                  <p className={styles.weekLead}>{track.lead}</p>
+
+                  <ol className={styles.track}>
+                    {track.items.map((item) => (
+                      <li key={item.title} className={styles.milestone}>
+                        <span className={styles.milestoneDays}>{item.days}</span>
+                        <h4 className={styles.milestoneTitle}>{item.title}</h4>
+                        <p className={styles.milestoneText}>{item.body}</p>
                       </li>
                     ))}
                   </ol>

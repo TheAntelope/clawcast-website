@@ -4,8 +4,18 @@ export type WizardStep = "voice" | "feed" | "channels" | "done";
 
 export type CreatorState = {
   id: string;
-  voice?: { id: string; name: string; mock?: boolean };
-  substack?: { url: string; feed: string; title?: string };
+  voice?: {
+    id: string;
+    name: string;
+    mock?: boolean;
+    kind?: "clone" | "premium";
+  };
+  substack?: {
+    url: string;
+    feed: string;
+    title?: string;
+    firstEpisodeAt?: string;
+  };
   channels?: string[];
   createdAt: string;
 };

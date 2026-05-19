@@ -1,11 +1,16 @@
+import Link from "next/link";
 import type { WizardStep } from "@/lib/creator-state";
 import styles from "./wizard.module.css";
 
-const ORDER: { id: WizardStep; label: string }[] = [
-  { id: "voice", label: "Clone your voice" },
-  { id: "feed", label: "Connect your Substack" },
-  { id: "channels", label: "Pick your channels" },
-  { id: "done", label: "All set" },
+const ORDER: { id: WizardStep; label: string; href: string }[] = [
+  { id: "voice", label: "Clone your voice", href: "/creators/start/voice" },
+  { id: "feed", label: "Connect your Substack", href: "/creators/start/feed" },
+  {
+    id: "channels",
+    label: "Pick your channels",
+    href: "/creators/start/channels",
+  },
+  { id: "done", label: "All set", href: "/creators/start/done" },
 ];
 
 export function Stepper({
@@ -28,16 +33,27 @@ export function Stepper({
         ]
           .filter(Boolean)
           .join(" ");
+        const inner = (
+          <>
+            <span className={styles.stepperIndex}>
+              {isDone ? "Done" : `Step ${idx + 1}`}
+            </span>
+            <span className={styles.stepperLabel}>{step.label}</span>
+          </>
+        );
         return (
           <li
             key={step.id}
             className={cls}
             aria-current={isActive ? "step" : undefined}
           >
-            <span className={styles.stepperIndex}>
-              {isDone ? "Done" : `Step ${idx + 1}`}
-            </span>
-            <span className={styles.stepperLabel}>{step.label}</span>
+            {isDone ? (
+              <Link href={step.href} className={styles.stepperItemLink}>
+                {inner}
+              </Link>
+            ) : (
+              inner
+            )}
           </li>
         );
       })}

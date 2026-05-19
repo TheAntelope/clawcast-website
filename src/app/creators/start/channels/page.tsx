@@ -7,8 +7,8 @@ import { ChannelsForm, type ChannelOption } from "./ChannelsForm";
 const CHANNELS: ChannelOption[] = [
   {
     id: "spotify-shared",
-    label: "Spotify (shared ClawCast pilot account)",
-    meta: "Live · episodes ship to a shared ClawCast Spotify show during the pilot",
+    label: "Spotify (shared ClawCast pilot show)",
+    meta: "Live · episodes append to the public RSS feed Spotify pulls into the ClawCast show",
     available: true,
   },
   {

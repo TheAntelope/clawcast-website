@@ -63,6 +63,21 @@
 .stepperItemDone {
   background: #ffffff;
   border-color: var(--color-rule);
+  padding: 0;
+}
+
+.stepperItemLink {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.stepperItemLink:hover {
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .stepperIndex {
@@ -250,6 +265,56 @@
   font-size: 13px;
 }
 
+.modeToggle {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.modeOption {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px 14px 40px;
+  border-radius: 12px;
+  border: 1px solid var(--color-rule);
+  background: #ffffff;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.modeOption:hover {
+  border-color: var(--color-amber);
+  background: rgba(184, 100, 42, 0.04);
+}
+
+.modeOptionActive {
+  border-color: var(--color-amber);
+  background: rgba(184, 100, 42, 0.06);
+  box-shadow: 0 0 0 1px var(--color-amber) inset;
+}
+
+.modeRadio {
+  position: absolute;
+  top: 16px;
+  left: 14px;
+  margin: 0;
+}
+
+.modeOptionLabel {
+  font-family: var(--typography-callout-font-family);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-ink);
+}
+
+.modeOptionMeta {
+  font-size: 13px;
+  color: var(--color-muted);
+  line-height: 1.45;
+}
+
 .channelGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -347,4 +412,250 @@
   font-size: 13px;
   color: var(--color-ink-soft);
   word-break: break-all;
+}
+
+.script {
+  background: var(--color-cream-deep);
+  border: 1px solid var(--color-rule);
+  border-radius: 12px;
+  padding: clamp(16px, 2vw, 22px) clamp(18px, 2.2vw, 26px);
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scriptPara {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.recorder {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--color-rule);
+  background: #ffffff;
+}
+
+.recorderIdle,
+.recorderActive,
+.recorderRecorded {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.recorderActive {
+  align-items: center;
+}
+
+.recorderRecorded {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.recorderMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 200px;
+}
+
+.recorderTime {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1;
+}
+
+.recorderPulse {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.recorderPulseDot {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #c0392b;
+  box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.55);
+  animation: recorderPulse 1.4s ease-out infinite;
+}
+
+@keyframes recorderPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(192, 57, 43, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(192, 57, 43, 0);
+  }
+}
+
+.recorderAudio {
+  width: 100%;
+}
+
+.recorderActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fallback {
+  border: 1px dashed var(--color-rule);
+  border-radius: 12px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.fallbackSummary {
+  cursor: pointer;
+  font-family: var(--typography-callout-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+  list-style: revert;
+}
+
+.fallbackSummary:hover {
+  color: var(--color-ink);
+}
+
+.fallbackBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.sampleStatus {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(56, 142, 60, 0.08);
+  border: 1px solid rgba(56, 142, 60, 0.25);
+  color: #1f5523;
+  font-size: 14px;
+}
+
+.previewIdle {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.previewList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.previewPosts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.previewPost {
+  border: 1px solid var(--color-rule);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #ffffff;
+}
+
+.previewPostHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.previewPostTitle {
+  font-family: var(--typography-callout-font-family);
+  font-size: 15px;
+  color: var(--color-ink);
+}
+
+.previewPostMeta {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.previewPostExcerpt {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-ink-soft);
+  line-height: 1.5;
+}
+
+.episodeCard {
+  border: 1px solid rgba(56, 142, 60, 0.3);
+  background: rgba(56, 142, 60, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.episodeHeader {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.episodeBadge {
+  font-family: var(--typography-meta-font-family);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #1f5523;
+  background: rgba(56, 142, 60, 0.18);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.episodeMeta {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.episodeTitle {
+  margin: 0;
+  font-family: var(--typography-subtitle-font-family);
+  font-size: 18px;
+  color: var(--color-ink);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
