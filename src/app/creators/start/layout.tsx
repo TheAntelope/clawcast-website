@@ -18,7 +18,7 @@ export default function CreatorStartLayout({
 }) {
   return (
     <div className={shell.page}>
-      <SiteHeader active="creators" />
+      <SiteHeader />
       <main className={styles.wizard}>
         <div className={shell.container}>
           <div className={styles.shellInner}>{children}</div>

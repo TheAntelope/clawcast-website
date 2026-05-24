@@ -112,8 +112,8 @@ export default async function DonePage() {
           >
             Open ClawCast on Spotify
           </a>
-          <Link href="/creators" className={styles.btnSecondary}>
-            Back to creators page
+          <Link href="/" className={styles.btnSecondary}>
+            Back to ClawCast
           </Link>
           <form action={resetWizard}>
             <button type="submit" className={styles.btnGhost}>

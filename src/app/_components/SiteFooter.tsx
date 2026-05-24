@@ -8,7 +8,6 @@ export function SiteFooter() {
         <span>&copy; {new Date().getFullYear()} ClawCast</span>
         <nav className={styles.footerLinks} aria-label="Footer">
           <Link href="/listeners">For listeners</Link>
-          <Link href="/creators">For creators</Link>
           <Link href="/roadmap">Roadmap</Link>
           <Link href="/about">About</Link>
           <Link href="/privacy">Privacy</Link>

@@ -5,7 +5,6 @@ type NavLink = { href: string; label: string };
 
 const navLinks: NavLink[] = [
   { href: "/listeners", label: "For listeners" },
-  { href: "/creators", label: "For creators" },
   { href: "/roadmap", label: "Roadmap" },
   { href: "/about", label: "About" },
 ];
@@ -13,7 +12,7 @@ const navLinks: NavLink[] = [
 export function SiteHeader({
   active,
 }: {
-  active?: "home" | "listeners" | "creators" | "roadmap" | "about";
+  active?: "home" | "listeners" | "roadmap" | "about";
 }) {
   return (
     <header className={styles.header}>
@@ -25,7 +24,6 @@ export function SiteHeader({
           {navLinks.map((link) => {
             const key = link.href.replace("/", "") as
               | "listeners"
-              | "creators"
               | "roadmap"
               | "about";
             const isActive = active === key;
