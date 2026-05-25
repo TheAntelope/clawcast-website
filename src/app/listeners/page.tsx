@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 const betaMailto =
-  "mailto:hello@theclawcast.com?subject=ClawCast%20iOS%20beta%20tester&body=Hi%20—%20I%27d%20like%20to%20join%20the%20ClawCast%20listener%20beta.";
+  "mailto:Vince@theclawcast.com?subject=ClawCast%20iOS%20beta%20tester&body=Hi%20—%20I%27d%20like%20to%20join%20the%20ClawCast%20listener%20beta.";
 
 export default function Listeners() {
   return (

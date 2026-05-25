@@ -24,7 +24,7 @@ export default function Home() {
             <div className={shell.heroActions}>
               <a
                 className={shell.btnPrimary}
-                href="mailto:hello@theclawcast.com?subject=Join%20the%20ClawCast%20beta"
+                href="mailto:Vince@theclawcast.com?subject=Join%20the%20ClawCast%20beta"
               >
                 Join the beta
               </a>

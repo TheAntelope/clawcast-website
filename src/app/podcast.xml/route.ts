@@ -19,7 +19,7 @@ const SHOW_TITLE = "ClawCast";
 const SHOW_DESCRIPTION =
   "Newsletters, narrated. ClawCast renders the writers you follow into short, listenable episodes — read in their own voice (or one they picked).";
 const SHOW_AUTHOR = "ClawCast";
-const SHOW_OWNER_EMAIL = "hello@theclawcast.com";
+const SHOW_OWNER_EMAIL = "Vince@theclawcast.com";
 const SHOW_LANGUAGE = "en-us";
 const SHOW_CATEGORY = "Technology";
 

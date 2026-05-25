@@ -128,8 +128,8 @@ export default function About() {
             </div>
 
             <div className={styles.contactRow}>
-              <a className={shell.btnPrimary} href="mailto:hello@theclawcast.com">
-                hello@theclawcast.com
+              <a className={shell.btnPrimary} href="mailto:Vince@theclawcast.com">
+                Vince@theclawcast.com
               </a>
               <span className={styles.contactNote}>
                 Pitches, press, partnerships, or just hello — same inbox.

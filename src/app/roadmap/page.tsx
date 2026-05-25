@@ -139,7 +139,7 @@ const tracks: Track[] = [
       {
         days: "Now",
         title: "Notify on new signups",
-        body: "Email hello@theclawcast.com whenever a creator finishes the wizard, with the voice ID, feed URL, and channel choice. Until this ships, submissions are effectively lost.",
+        body: "Email Vince@theclawcast.com whenever a creator finishes the wizard, with the voice ID, feed URL, and channel choice. Until this ships, submissions are effectively lost.",
       },
       {
         days: "Next",

@@ -65,8 +65,8 @@ export default function Privacy() {
                     You can delete your account and the personal data we hold
                     about you from inside the app (Settings &rarr; Delete
                     account), or by emailing{" "}
-                    <a href="mailto:vincemartin1991@gmail.com">
-                      vincemartin1991@gmail.com
+                    <a href="mailto:Vince@theclawcast.com">
+                      Vince@theclawcast.com
                     </a>
                     .
                   </li>
@@ -80,8 +80,8 @@ export default function Privacy() {
                 Data Protection Regulation (GDPR), Vince Martin is the{" "}
                 <strong>data controller</strong> responsible for your personal
                 data. You can reach the controller at{" "}
-                <a href="mailto:vincemartin1991@gmail.com">
-                  vincemartin1991@gmail.com
+                <a href="mailto:Vince@theclawcast.com">
+                  Vince@theclawcast.com
                 </a>
                 .
               </p>
@@ -409,8 +409,8 @@ export default function Privacy() {
               </ul>
               <p>
                 To exercise any of these rights, email{" "}
-                <a href="mailto:vincemartin1991@gmail.com">
-                  vincemartin1991@gmail.com
+                <a href="mailto:Vince@theclawcast.com">
+                  Vince@theclawcast.com
                 </a>
                 . We&rsquo;ll respond within 30 days.
               </p>
@@ -450,8 +450,8 @@ export default function Privacy() {
               <h2>12. Contact</h2>
               <p>
                 Questions, requests, or just curious? Email{" "}
-                <a href="mailto:vincemartin1991@gmail.com">
-                  vincemartin1991@gmail.com
+                <a href="mailto:Vince@theclawcast.com">
+                  Vince@theclawcast.com
                 </a>
                 .
               </p>

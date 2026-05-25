@@ -11,7 +11,7 @@ export function SiteFooter() {
           <Link href="/roadmap">Roadmap</Link>
           <Link href="/about">About</Link>
           <Link href="/privacy">Privacy</Link>
-          <a href="mailto:hello@theclawcast.com">Contact</a>
+          <a href="mailto:Vince@theclawcast.com">Contact</a>
         </nav>
       </div>
     </footer>
