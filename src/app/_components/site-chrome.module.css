@@ -75,3 +75,25 @@
 .footerLinks a:hover {
   color: var(--color-ink);
 }
+
+.footerBacked {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: var(--spacing-m);
+  margin-bottom: var(--spacing-m);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.footerBacked img {
+  display: block;
+  height: auto;
+  opacity: 0.85;
+  transition: opacity 120ms ease;
+}
+
+.footerBacked a:hover img {
+  opacity: 1;
+}
