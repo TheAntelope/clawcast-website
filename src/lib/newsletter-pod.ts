@@ -4,7 +4,11 @@
 // process.env, which is never exposed to the browser. Wraps the endpoints
 // shipped in Newsletter-pod PRs #16/17/18.
 
-const DEFAULT_TIMEOUT_MS = 60_000;
+// Most calls (list / get loop / paste-feedback) complete in under a second.
+// runLoop is the outlier — it drives a 60-100s pipeline (LLM + TTS + ffmpeg
+// + X media upload). Vercel server functions allow up to 5 minutes; align
+// the client to 4 minutes so we abort before Vercel kills the function.
+const DEFAULT_TIMEOUT_MS = 240_000;
 
 export type BroadcastLoop = {
   loop_id: string;
