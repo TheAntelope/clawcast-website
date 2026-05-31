@@ -20,10 +20,23 @@ export const dynamic = "force-dynamic";
 
 type Props = {
   params: Promise<{ loopId: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export default async function LoopDetailPage({ params }: Props) {
+function firstParam(value: string | string[] | undefined): string | undefined {
+  if (Array.isArray(value)) return value[0];
+  return value;
+}
+
+export default async function LoopDetailPage({ params, searchParams }: Props) {
   const { loopId } = await params;
+  const search = await searchParams;
+  const runError = firstParam(search.run_error);
+  const runSuccess = firstParam(search.run_success);
+  const runSkipped = firstParam(search.run_skipped);
+  const feedbackError = firstParam(search.feedback_error);
+  const feedbackSuccess = firstParam(search.feedback_success);
+
   let loop: BroadcastLoop | null = null;
   let episodes: BroadcastEpisode[] = [];
   let configError: string | null = null;
@@ -74,6 +87,36 @@ export default async function LoopDetailPage({ params }: Props) {
           </form>
         </div>
       </header>
+
+      {runError && (
+        <div className={styles.flashError}>
+          <strong>Run failed.</strong> {runError}
+        </div>
+      )}
+      {runSuccess && runSuccess.startsWith("http") && (
+        <div className={styles.flashSuccess}>
+          <strong>Posted.</strong>{" "}
+          <a href={runSuccess} target="_blank" rel="noopener noreferrer">
+            View tweet ↗
+          </a>
+        </div>
+      )}
+      {runSuccess && !runSuccess.startsWith("http") && (
+        <div className={styles.flashSuccess}>{runSuccess}</div>
+      )}
+      {runSkipped && (
+        <div className={styles.flashNeutral}>
+          <strong>Run skipped.</strong> {runSkipped}
+        </div>
+      )}
+      {feedbackError && (
+        <div className={styles.flashError}>
+          <strong>Feedback save failed.</strong> {feedbackError}
+        </div>
+      )}
+      {feedbackSuccess && (
+        <div className={styles.flashSuccess}>{feedbackSuccess}</div>
+      )}
 
       <section>
         <h2 className={styles.headerTitle} style={{ fontSize: 20, marginBottom: 12 }}>
