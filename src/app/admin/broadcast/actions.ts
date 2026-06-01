@@ -43,6 +43,30 @@ function parseSeedTopics(raw: string | null): string[] {
     .filter(Boolean);
 }
 
+function parseSourceIds(raw: string): string[] {
+  // SourcePicker (client) packs the selection as a JSON array in a single
+  // hidden input. Treat any non-parsable / non-array value as empty so a
+  // missing or stale field doesn't blank an existing loop config.
+  const trimmed = (raw || "").trim();
+  if (!trimmed) return [];
+  try {
+    const parsed = JSON.parse(trimmed);
+    if (!Array.isArray(parsed)) return [];
+    const seen = new Set<string>();
+    const result: string[] = [];
+    for (const id of parsed) {
+      if (typeof id !== "string") continue;
+      const cleaned = id.trim();
+      if (!cleaned || seen.has(cleaned)) continue;
+      seen.add(cleaned);
+      result.push(cleaned);
+    }
+    return result;
+  } catch {
+    return [];
+  }
+}
+
 function readForm(formData: FormData, name: string): string {
   const value = formData.get(name);
   return typeof value === "string" ? value : "";
@@ -73,6 +97,7 @@ export async function upsertLoopAction(formData: FormData) {
     seed_topics: parseSeedTopics(readForm(formData, "seed_topics")),
     active: readBoolean(formData, "active"),
     feedback_prompt_text: readOptionalString(formData, "feedback_prompt_text"),
+    source_ids: parseSourceIds(readForm(formData, "source_ids")),
   };
 
   await upsertLoop(input);

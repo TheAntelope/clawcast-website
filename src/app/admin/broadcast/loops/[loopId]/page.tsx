@@ -5,8 +5,10 @@ import {
   NewsletterPodConfigError,
   getLoop,
   listLoopEpisodes,
+  listSourceCatalog,
   type BroadcastEpisode,
   type BroadcastLoop,
+  type SourceCatalogEntry,
 } from "@/lib/newsletter-pod";
 import {
   deleteLoopAction,
@@ -14,6 +16,7 @@ import {
   runLoopAction,
   upsertLoopAction,
 } from "../../actions";
+import { SourcePicker } from "../../SourcePicker";
 import styles from "../../admin.module.css";
 
 export const dynamic = "force-dynamic";
@@ -39,11 +42,20 @@ export default async function LoopDetailPage({ params, searchParams }: Props) {
 
   let loop: BroadcastLoop | null = null;
   let episodes: BroadcastEpisode[] = [];
+  let sources: SourceCatalogEntry[] = [];
   let configError: string | null = null;
   try {
     loop = await getLoop(loopId);
     if (loop) {
       episodes = await listLoopEpisodes(loopId, 25);
+      // Source catalog read is best-effort; missing it shouldn't 500 the
+      // detail page since the rest of the form (config edit, episodes,
+      // run-now) is still useful.
+      try {
+        sources = await listSourceCatalog();
+      } catch {
+        sources = [];
+      }
     }
   } catch (err) {
     if (err instanceof NewsletterPodConfigError) {
@@ -182,6 +194,27 @@ export default async function LoopDetailPage({ params, searchParams }: Props) {
               Empty = use default copy. Set custom text to override. The publisher
               uses an explicit empty string to suppress; manage that via the API
               directly if needed.
+            </div>
+          </div>
+
+          <div className={styles.formRow}>
+            <label>Curated sources to ground the script in</label>
+            {sources.length > 0 ? (
+              <SourcePicker sources={sources} selectedSourceIds={loop.source_ids ?? []} />
+            ) : (
+              <div className={styles.notice}>
+                Source catalog unavailable. Existing selections are preserved on save.
+                <input
+                  type="hidden"
+                  name="source_ids"
+                  value={JSON.stringify(loop.source_ids ?? [])}
+                />
+              </div>
+            )}
+            <div className={styles.formHint}>
+              Recent items from the selected sources are fetched at run time and
+              interleaved with the topic in the script LLM&apos;s prompt. Leave
+              empty to let the LLM riff on the topic alone.
             </div>
           </div>
 
