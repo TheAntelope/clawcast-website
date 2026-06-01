@@ -1,9 +1,30 @@
 import Link from "next/link";
 
+import {
+  NewsletterPodConfigError,
+  listSourceCatalog,
+  type SourceCatalogEntry,
+} from "@/lib/newsletter-pod";
 import { upsertLoopAction } from "../../actions";
+import { SourcePicker } from "../../SourcePicker";
 import styles from "../../admin.module.css";
 
-export default function NewLoopPage() {
+export const dynamic = "force-dynamic";
+
+export default async function NewLoopPage() {
+  let sources: SourceCatalogEntry[] = [];
+  let sourcesError: string | null = null;
+  try {
+    sources = await listSourceCatalog();
+  } catch (err) {
+    if (err instanceof NewsletterPodConfigError) {
+      sourcesError =
+        "NEWSLETTER_POD_URL and NEWSLETTER_POD_JOB_TRIGGER_TOKEN must be configured in env.";
+    } else {
+      sourcesError = err instanceof Error ? err.message : String(err);
+    }
+  }
+
   return (
     <div className={styles.page}>
       <div className={styles.crumbs}>
@@ -89,6 +110,19 @@ export default function NewLoopPage() {
             name="feedback_prompt_text"
             placeholder="Leave blank for default copy. Type custom text to override. To suppress the reply entirely, type a single hyphen and remove it after saving."
           />
+        </div>
+
+        <div className={styles.formRow}>
+          <label>Curated sources to ground the script in</label>
+          {sourcesError && <div className={styles.notice}>{sourcesError}</div>}
+          {!sourcesError && (
+            <SourcePicker sources={sources} selectedSourceIds={[]} />
+          )}
+          <div className={styles.formHint}>
+            Recent items from the selected sources are fetched at run time and
+            interleaved with the topic in the script LLM&apos;s prompt. Leave
+            empty to let the LLM riff on the topic alone (Phase 0 behavior).
+          </div>
         </div>
 
         <div className={styles.formRow}>

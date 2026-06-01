@@ -19,8 +19,17 @@ export type BroadcastLoop = {
   seed_topics: string[];
   active: boolean;
   feedback_prompt_text: string | null;
+  source_ids: string[];
   created_at: string;
   updated_at: string;
+};
+
+export type SourceCatalogEntry = {
+  source_id: string;
+  name: string;
+  rss_url: string;
+  enabled: boolean;
+  topic: string | null;
 };
 
 export type BroadcastEpisode = {
@@ -51,6 +60,7 @@ export type UpsertLoopInput = {
   seed_topics: string[];
   active: boolean;
   feedback_prompt_text: string | null;
+  source_ids: string[];
 };
 
 export type RunLoopResult = {
@@ -146,6 +156,18 @@ export async function listLoops(activeOnly = false): Promise<BroadcastLoop[]> {
     `/jobs/broadcast/loops${activeOnly ? "?active_only=true" : ""}`,
   );
   return result.loops;
+}
+
+export async function listSourceCatalog(): Promise<SourceCatalogEntry[]> {
+  // /v1/sources/catalog is publicly readable on Newsletter-pod (no auth
+  // gate). We still go through `call` so it picks up the same baseUrl
+  // resolution + timeout + error shape as the rest of the client; the
+  // X-Job-Trigger-Token header is sent but ignored on this path.
+  const result = await call<{ sources: SourceCatalogEntry[] }>(
+    "GET",
+    "/v1/sources/catalog",
+  );
+  return result.sources;
 }
 
 export async function getLoop(loopId: string): Promise<BroadcastLoop | null> {
