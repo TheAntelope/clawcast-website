@@ -79,6 +79,27 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <div className={shell.divider} />
+
+        <section className={`${shell.section} ${styles.appStoreCta}`}>
+          <div className={shell.container}>
+            <a
+              className={styles.appStoreBadge}
+              href="https://apps.apple.com/app/theclawcast/id6762568729"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Download ClawCast on the App Store"
+            >
+              <img
+                src="/app-store-badge.svg"
+                alt="Download on the App Store"
+                width={180}
+                height={60}
+              />
+            </a>
+          </div>
+        </section>
       </main>
 
       <SiteFooter />

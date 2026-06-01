@@ -34,3 +34,27 @@
   font-size: 15px;
   line-height: 1.55;
 }
+
+.appStoreCta {
+  text-align: center;
+}
+
+.appStoreBadge {
+  display: inline-block;
+  transition: transform 120ms ease, opacity 120ms ease;
+}
+
+.appStoreBadge:hover {
+  transform: translateY(-1px);
+  opacity: 0.88;
+}
+
+.appStoreBadge:active {
+  transform: translateY(0);
+}
+
+.appStoreBadge img {
+  width: 180px;
+  height: auto;
+  display: block;
+}
