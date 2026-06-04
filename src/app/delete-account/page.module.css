@@ -1,0 +1,73 @@
+.prose {
+  max-width: 68ch;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-l);
+  color: var(--color-ink-soft);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+.prose h2 {
+  font-family: var(--typography-subtitle-font-family);
+  font-size: clamp(22px, 2.6vw, 28px);
+  font-weight: var(--typography-subtitle-font-weight);
+  color: var(--color-ink);
+  margin-top: var(--spacing-l);
+}
+
+.prose p {
+  margin: 0;
+}
+
+.prose ul {
+  margin: 0;
+  padding-left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prose li {
+  padding-left: 4px;
+}
+
+.prose a {
+  color: var(--color-amber-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  color: var(--color-amber);
+}
+
+.prose strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.tldr {
+  background: #ffffff;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-l);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.tldr h2 {
+  margin-top: 0;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.steps li {
+  padding-left: 4px;
+}
