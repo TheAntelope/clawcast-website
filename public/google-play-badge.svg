@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="40" viewBox="0 0 120 40" role="img" aria-label="Coming soon on Google Play">
+  <rect x="0.5" y="0.5" width="119" height="39" rx="8.5" fill="#000000"/>
+  <g transform="translate(7 9) scale(0.62)">
+    <path fill="#34A853" d="M5 4 L5 18 L31 18 Z"/>
+    <path fill="#4285F4" d="M5 18 L5 32 L31 18 Z"/>
+    <path fill="#FBBC04" d="M17 18 L20 12 L31 18 Z"/>
+    <path fill="#EA4335" d="M17 18 L20 24 L31 18 Z"/>
+  </g>
+  <g fill="#ffffff">
+    <text x="31" y="16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="6.4" letter-spacing="0.2">Coming soon on</text>
+    <text x="30.5" y="30.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.8" font-weight="600" letter-spacing="-0.3">Google Play</text>
+  </g>
+</svg>

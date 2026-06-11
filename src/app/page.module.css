@@ -39,6 +39,14 @@
   text-align: center;
 }
 
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
 .appStoreBadge {
   display: inline-block;
   transition: transform 120ms ease, opacity 120ms ease;
@@ -54,6 +62,18 @@
 }
 
 .appStoreBadge img {
+  width: 180px;
+  height: auto;
+  display: block;
+}
+
+.comingSoonBadge {
+  display: inline-block;
+  cursor: default;
+  opacity: 0.7;
+}
+
+.comingSoonBadge img {
   width: 180px;
   height: auto;
   display: block;

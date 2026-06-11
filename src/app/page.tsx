@@ -83,7 +83,7 @@ export default function Home() {
         <div className={shell.divider} />
 
         <section className={`${shell.section} ${styles.appStoreCta}`}>
-          <div className={shell.container}>
+          <div className={`${shell.container} ${styles.badgeRow}`}>
             <a
               className={styles.appStoreBadge}
               href="https://apps.apple.com/app/theclawcast/id6762568729"
@@ -98,6 +98,17 @@ export default function Home() {
                 height={60}
               />
             </a>
+            <span
+              className={styles.comingSoonBadge}
+              aria-label="ClawCast is coming soon to Google Play"
+            >
+              <img
+                src="/google-play-badge.svg"
+                alt="Coming soon on Google Play"
+                width={180}
+                height={60}
+              />
+            </span>
           </div>
         </section>
       </main>
