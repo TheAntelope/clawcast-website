@@ -7,14 +7,40 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "Roadmap — ClawCast",
   description:
-    "What ClawCast is shipping in the next three weeks, day by day — plus the parallel work on theclawcast.com for creators and listeners.",
+    "Where ClawCast stands today — live on iOS, closed alpha on Android, more podcast players next — plus what we're building over the coming weeks.",
   openGraph: {
     title: "ClawCast roadmap",
     description:
-      "Three weeks of iOS + backend work, plus the website to-do list for creators and listeners.",
+      "Live on iOS, closed alpha on Android, more podcast players next — plus what's coming for creators and listeners.",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "ClawCast roadmap",
+    description:
+      "Live on iOS, closed alpha on Android, more podcast players next.",
+  },
 };
+
+type Status = { label: string; state: string; body: string };
+
+const statuses: Status[] = [
+  {
+    label: "iOS",
+    state: "Live",
+    body: "ClawCast is on the App Store. Anyone can download it, make an episode, and hear it free before subscribing.",
+  },
+  {
+    label: "Android",
+    state: "Closed alpha",
+    body: "An Android build is in closed alpha. The waitlist is open — that's the only way in for now.",
+  },
+  {
+    label: "Other players",
+    state: "Next",
+    body: "Apple Podcasts works today. Spotify, Overcast, and Pocket Casts are next, in an order we're still settling — tell us which you'd use.",
+  },
+];
 
 type Milestone = { days: string; title: string; body: string };
 type Week = {
@@ -162,22 +188,22 @@ const tracks: Track[] = [
     label: "Website",
     audience: "For listeners",
     theme: "Make the listener page do more than describe.",
-    lead: "Today /listeners is a pitch with a mailto. These items turn it into a place where prospective listeners can hear the product and tell us what to build next.",
+    lead: "The listener page now sells the live app and plays a real episode. These items keep building it out.",
     items: [
       {
-        days: "Now",
-        title: "Sample episode on /listeners",
-        body: "Embed a five-minute pilot episode so visitors can hear what ClawCast sounds like before applying. Plain HTML5 audio is enough.",
+        days: "Done",
+        title: "App Store CTA",
+        body: "The homepage and /listeners point straight to the App Store, with the free-to-try story replacing the old apply-by-email flow.",
+      },
+      {
+        days: "Done",
+        title: "Daily episode, embedded",
+        body: "The short daily demo show now plays inline on the homepage and /listeners, so visitors hear ClawCast before they download.",
       },
       {
         days: "Now",
         title: "Vote on the next platform",
-        body: "Small form on /listeners letting beta applicants pick the platform we ship next — Spotify, Overcast, or Pocket Casts. Tally feeds the iOS roadmap.",
-      },
-      {
-        days: "Next",
-        title: "App Store CTA",
-        body: "Once TestFlight opens to public testers, swap the mailto 'Apply for the beta' button on /listeners for a direct App Store / TestFlight link.",
+        body: "Small form letting listeners pick the platform we ship next — Spotify, Overcast, or Pocket Casts. Feeds the iOS roadmap.",
       },
       {
         days: "Later",
@@ -192,7 +218,7 @@ const scrubber = [
   { label: "Today", sub: "Kickoff" },
   { label: "Day 7", sub: "TestFlight live" },
   { label: "Day 14", sub: "Backend hardened" },
-  { label: "Day 21", sub: "Tunable beta" },
+  { label: "Day 21", sub: "Tunable" },
 ];
 
 const beyond = [
@@ -212,13 +238,35 @@ export default function Roadmap() {
           <div className={shell.container}>
             <div className={shell.eyebrow}>Roadmap</div>
             <h1 className={shell.heroHeadline}>
-              The next three weeks of ClawCast.
+              Where ClawCast stands, and what&rsquo;s next.
             </h1>
             <p className={shell.heroSub}>
-              We plan in days and weeks, not quarters. Here&rsquo;s what
-              we&rsquo;re shipping between now and three weeks out — TestFlight,
-              a harder backend, and a recommender you teach with swipes.
+              We plan in days and weeks, not quarters. ClawCast is live on iOS
+              today. Below: where each platform stands right now, then the build
+              work we&rsquo;re pushing through next — a harder backend and a
+              recommender you teach with swipes.
             </p>
+          </div>
+        </section>
+
+        <div className={shell.divider} />
+
+        <section className={shell.section}>
+          <div className={shell.container}>
+            <div className={shell.sectionHeader}>
+              <h2 className={shell.sectionHeadline}>Where things stand today.</h2>
+            </div>
+            <div className={styles.statusGrid}>
+              {statuses.map((s) => (
+                <article key={s.label} className={styles.statusCard}>
+                  <div className={styles.statusHead}>
+                    <span className={styles.statusLabel}>{s.label}</span>
+                    <span className={styles.statusState}>{s.state}</span>
+                  </div>
+                  <p className={styles.statusBody}>{s.body}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 

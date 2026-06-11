@@ -14,6 +14,12 @@ export const metadata: Metadata = {
       "Two sides of the same idea: a podcast made from the news you follow, and a way for writers to publish in their own voice.",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "About ClawCast",
+    description:
+      "Two sides of the same idea: a podcast made from the news you follow, and a way for writers to publish in their own voice.",
+  },
 };
 
 export default function About() {

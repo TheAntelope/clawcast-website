@@ -2,15 +2,21 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ClawCast — your own podcast, made from the news you actually follow",
+  title: "ClawCast — your unread newsletters, turned into your own morning show",
   description:
-    "ClawCast turns the news and writers you actually follow into a short daily podcast, hosted by AI voices. Pick your sources, choose the hosts, and a new episode lands in Apple Podcasts on your schedule.",
+    "ClawCast turns the newsletters and writers you follow into a short podcast, hosted by AI voices, delivered to Apple Podcasts on your schedule. Live on iOS — free to try, with Pro and Max plans.",
   metadataBase: new URL("https://theclawcast.com"),
   openGraph: {
     title: "ClawCast",
     description:
-      "Your own podcast, hosted by AI voices, made from the news and writers you actually follow.",
+      "Your unread newsletters, turned into your own morning show. Live on iOS — free to try.",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ClawCast",
+    description:
+      "Your unread newsletters, turned into your own morning show. Live on iOS — free to try.",
   },
 };
 

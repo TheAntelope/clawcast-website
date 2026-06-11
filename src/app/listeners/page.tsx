@@ -1,23 +1,29 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { DailyEpisode } from "../_components/DailyEpisode";
 import { SiteFooter } from "../_components/SiteFooter";
 import { SiteHeader } from "../_components/SiteHeader";
+import { APP_STORE_URL, PLANS } from "@/lib/site-config";
 import shell from "../_styles/shell.module.css";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "ClawCast for listeners — the podcast that reads your feed to you",
   description:
-    "ClawCast for iOS turns the writers, newsletters, and topics you already follow into a short daily podcast in Apple Podcasts. Now in private beta.",
+    "ClawCast for iOS turns the writers, newsletters, and topics you already follow into a short podcast in Apple Podcasts. Live on the App Store, free to try.",
   openGraph: {
     title: "ClawCast for listeners",
     description:
-      "The writers and newsletters you already follow, delivered as a short daily podcast. Now in private beta on iOS.",
+      "The writers and newsletters you already follow, delivered as a short podcast. Live on iOS, free to try.",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "ClawCast for listeners",
+    description:
+      "The writers and newsletters you already follow, delivered as a short podcast. Live on iOS, free to try.",
+  },
 };
-
-const betaMailto =
-  "mailto:Vince@theclawcast.com?subject=ClawCast%20iOS%20beta%20tester&body=Hi%20—%20I%27d%20like%20to%20join%20the%20ClawCast%20listener%20beta.";
 
 export default function Listeners() {
   return (
@@ -27,7 +33,7 @@ export default function Listeners() {
       <main>
         <section className={shell.hero}>
           <div className={shell.container}>
-            <div className={shell.eyebrow}>For listeners · iOS beta</div>
+            <div className={shell.eyebrow}>For listeners · Live on iOS</div>
             <h1 className={shell.heroHeadline}>
               The reading list you never get to, finally finished — on your commute.
             </h1>
@@ -37,28 +43,43 @@ export default function Listeners() {
               Podcasts. Fresh episodes show up on the days you pick, in your timezone.
             </p>
             <div className={shell.heroActions}>
-              <a className={shell.btnPrimary} href={betaMailto}>
-                Apply for the beta
+              <a
+                className={styles.appStoreBadge}
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download ClawCast on the App Store"
+              >
+                <img
+                  src="/app-store-badge.svg"
+                  alt="Download on the App Store"
+                  width={180}
+                  height={60}
+                />
               </a>
-              <a className={shell.btnSecondary} href="#what-you-get">
-                What you get
+              <a className={shell.btnSecondary} href="#today">
+                Hear a sample
               </a>
             </div>
             <p className={styles.heroNote}>
-              Private TestFlight · iPhone (iOS 17+) · Free during beta
+              iPhone (iOS 17+) · Free to try · Plays in Apple Podcasts
             </p>
           </div>
         </section>
 
         <div className={shell.divider} />
 
+        <DailyEpisode id="today" />
+
+        <div className={shell.divider} />
+
         <section className={shell.section} id="what-you-get">
           <div className={shell.container}>
             <div className={shell.sectionHeader}>
-              <h2 className={shell.sectionHeadline}>What you get as a beta listener.</h2>
+              <h2 className={shell.sectionHeadline}>What you get.</h2>
               <p className={shell.sectionLead}>
-                We&rsquo;re looking for people who read a lot, save a lot of tabs, and wish
-                they had a smart friend to walk them through it all on the way to work.
+                ClawCast is for people who read a lot, save a lot of tabs, and wish they had a
+                smart friend to walk them through it all on the way to work.
               </p>
             </div>
 
@@ -80,9 +101,9 @@ export default function Listeners() {
               <li className={styles.feature}>
                 <h3 className={styles.featureTitle}>Five minutes, on purpose</h3>
                 <p className={styles.featureBody}>
-                  Every episode is about five minutes. Headlines, the actual reporting
-                  underneath, and what to read in full if you want to go deeper. Short enough
-                  to finish on the way to the office.
+                  Episodes are short by design — headlines, the reporting underneath, and what
+                  to read in full if you want to go deeper. Paid plans let you stretch an
+                  episode up to 20 minutes when there&rsquo;s more to cover.
                 </p>
               </li>
               <li className={styles.feature}>
@@ -101,11 +122,10 @@ export default function Listeners() {
                 </p>
               </li>
               <li className={styles.feature}>
-                <h3 className={styles.featureTitle}>Direct line to the team</h3>
+                <h3 className={styles.featureTitle}>Try it before you pay</h3>
                 <p className={styles.featureBody}>
-                  Beta testers get a Slack channel and an email that actually gets read. Tell
-                  us what&rsquo;s wrong, and there&rsquo;s a good chance you&rsquo;ll see it
-                  fixed the same week.
+                  Download it, wire up your sources, and generate a real episode for free
+                  before deciding on a plan. No card to hear what it sounds like.
                 </p>
               </li>
             </ul>
@@ -114,13 +134,44 @@ export default function Listeners() {
 
         <div className={shell.divider} />
 
+        <section className={shell.section} id="pricing">
+          <div className={shell.container}>
+            <div className={shell.sectionHeader}>
+              <h2 className={shell.sectionHeadline}>What it costs.</h2>
+              <p className={shell.sectionLead}>
+                Start free and hear your first episode before you pay. Paid plans unlock the
+                full source catalog, episodes up to 20 minutes, and delivery every day of the
+                week.
+              </p>
+            </div>
+
+            <div className={styles.planGrid}>
+              {PLANS.map((plan) => (
+                <article
+                  key={plan.name}
+                  className={`${styles.plan} ${plan.featured ? styles.planFeatured : ""}`}
+                >
+                  <h3 className={styles.planName}>{plan.name}</h3>
+                  <div className={styles.planPrice}>
+                    <span className={styles.planAmount}>{plan.price}</span>
+                    <span className={styles.planCadence}>{plan.cadence}</span>
+                  </div>
+                  <p className={styles.planBlurb}>{plan.blurb}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className={shell.divider} />
+
         <section className={shell.section}>
           <div className={shell.container}>
             <div className={shell.sectionHeader}>
-              <h2 className={shell.sectionHeadline}>Who we&rsquo;re looking for.</h2>
+              <h2 className={shell.sectionHeadline}>Who it&rsquo;s for.</h2>
               <p className={shell.sectionLead}>
-                The beta is small on purpose. We&rsquo;re prioritising people who&rsquo;ll
-                actually use it daily and give us blunt feedback.
+                ClawCast suits some listening habits better than others. Here&rsquo;s the
+                honest version, so you know before you download.
               </p>
             </div>
 
@@ -137,18 +188,35 @@ export default function Listeners() {
               <div className={styles.fit}>
                 <h3 className={styles.fitTitle}>Probably not yet if&hellip;</h3>
                 <ul className={styles.fitList}>
-                  <li>You listen in Spotify, Overcast, or Pocket Casts — those are next.</li>
-                  <li>You need an Android app — that&rsquo;s coming later.</li>
+                  <li>
+                    You listen in Spotify, Overcast, or Pocket Casts — those are on the
+                    roadmap.
+                  </li>
+                  <li>
+                    You&rsquo;re on Android — it&rsquo;s in closed alpha; join the{" "}
+                    <Link href="/#android">waitlist on the home page</Link>.
+                  </li>
                   <li>You want fully human-hosted shows. Ours are AI hosts.</li>
                 </ul>
               </div>
             </div>
 
             <div className={styles.ctaBlock}>
-              <a className={shell.btnPrimary} href={betaMailto}>
-                Apply for the beta
+              <a
+                className={styles.appStoreBadge}
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download ClawCast on the App Store"
+              >
+                <img
+                  src="/app-store-badge.svg"
+                  alt="Download on the App Store"
+                  width={180}
+                  height={60}
+                />
               </a>
-              <span className={styles.ctaNote}>Two-line reply about your reading habits is plenty.</span>
+              <span className={styles.ctaNote}>Free to try. Plays in Apple Podcasts.</span>
             </div>
           </div>
         </section>

@@ -35,18 +35,7 @@
   line-height: 1.55;
 }
 
-.appStoreCta {
-  text-align: center;
-}
-
-.badgeRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
+/* App Store badge — used as the primary CTA in the hero and pricing sections. */
 .appStoreBadge {
   display: inline-block;
   transition: transform 120ms ease, opacity 120ms ease;
@@ -67,14 +56,100 @@
   display: block;
 }
 
-.comingSoonBadge {
-  display: inline-block;
-  cursor: default;
-  opacity: 0.7;
+/* Pricing */
+.planGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--spacing-l);
 }
 
-.comingSoonBadge img {
-  width: 180px;
-  height: auto;
-  display: block;
+.plan {
+  background: #ffffff;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-l);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-s);
+}
+
+.planFeatured {
+  border-color: var(--color-amber);
+  box-shadow: 0 4px 18px rgba(184, 100, 42, 0.12);
+}
+
+.planName {
+  font-family: var(--typography-meta-font-family);
+  font-size: var(--typography-meta-font-size);
+  font-weight: var(--typography-meta-font-weight);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-amber-deep);
+}
+
+.planPrice {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.planAmount {
+  font-family: var(--typography-display-font-family);
+  font-size: 36px;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.planCadence {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.planBlurb {
+  color: var(--color-ink-soft);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.pricingCta {
+  margin-top: clamp(24px, 3vw, 36px);
+}
+
+/* On Android? strip */
+.androidStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-l);
+  background: #ffffff;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius-card);
+  padding: var(--spacing-l);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.androidTitle {
+  font-family: var(--typography-subtitle-font-family);
+  font-size: var(--typography-subtitle-font-size);
+  font-weight: var(--typography-subtitle-font-weight);
+  color: var(--color-ink);
+  margin-bottom: var(--spacing-xs);
+}
+
+.androidBody {
+  color: var(--color-ink-soft);
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 52ch;
+}
+
+.androidPending {
+  font-family: var(--typography-meta-font-family);
+  font-size: var(--typography-meta-font-size);
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+  white-space: nowrap;
 }

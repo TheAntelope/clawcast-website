@@ -1,6 +1,12 @@
 import Link from "next/link";
+import { DailyEpisode } from "./_components/DailyEpisode";
 import { SiteFooter } from "./_components/SiteFooter";
 import { SiteHeader } from "./_components/SiteHeader";
+import {
+  ANDROID_WAITLIST_FORM_URL,
+  APP_STORE_URL,
+  PLANS,
+} from "@/lib/site-config";
 import shell from "./_styles/shell.module.css";
 import styles from "./page.module.css";
 
@@ -12,28 +18,40 @@ export default function Home() {
       <main>
         <section className={shell.hero}>
           <div className={shell.container}>
-            <div className={shell.eyebrow}>Your daily briefing, made for you</div>
+            <div className={shell.eyebrow}>Live on iOS</div>
             <h1 className={shell.heroHeadline}>
-              Your own podcast, made from the news you actually follow.
+              Your unread newsletters, turned into your own morning show.
             </h1>
             <p className={shell.heroSub}>
               Pick the topics and writers you care about. ClawCast turns them into a short
               podcast, hosted by AI voices, and lands a fresh episode in Apple Podcasts on
-              the days you choose.
+              the days you choose. Free to try before you pay.
             </p>
             <div className={shell.heroActions}>
               <a
-                className={shell.btnPrimary}
-                href="mailto:Vince@theclawcast.com?subject=Join%20the%20ClawCast%20beta"
+                className={styles.appStoreBadge}
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download ClawCast on the App Store"
               >
-                Join the beta
+                <img
+                  src="/app-store-badge.svg"
+                  alt="Download on the App Store"
+                  width={180}
+                  height={60}
+                />
               </a>
-              <a className={shell.btnSecondary} href="#how">
-                See how it works
+              <a className={shell.btnSecondary} href="#today">
+                Hear today&rsquo;s episode
               </a>
             </div>
           </div>
         </section>
+
+        <div className={shell.divider} />
+
+        <DailyEpisode id="today" />
 
         <div className={shell.divider} />
 
@@ -82,33 +100,76 @@ export default function Home() {
 
         <div className={shell.divider} />
 
-        <section className={`${shell.section} ${styles.appStoreCta}`}>
-          <div className={`${shell.container} ${styles.badgeRow}`}>
-            <a
-              className={styles.appStoreBadge}
-              href="https://apps.apple.com/app/theclawcast/id6762568729"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Download ClawCast on the App Store"
-            >
-              <img
-                src="/app-store-badge.svg"
-                alt="Download on the App Store"
-                width={180}
-                height={60}
-              />
-            </a>
-            <span
-              className={styles.comingSoonBadge}
-              aria-label="ClawCast is coming soon to Google Play"
-            >
-              <img
-                src="/google-play-badge.svg"
-                alt="Coming soon on Google Play"
-                width={180}
-                height={60}
-              />
-            </span>
+        <section className={shell.section} id="pricing">
+          <div className={shell.container}>
+            <div className={shell.sectionHeader}>
+              <h2 className={shell.sectionHeadline}>Start free. Pay when it sticks.</h2>
+              <p className={shell.sectionLead}>
+                Make your first episode and hear it before you decide. Paid plans unlock the
+                full source catalog, episodes up to 20 minutes, and delivery every day of the
+                week.
+              </p>
+            </div>
+
+            <div className={styles.planGrid}>
+              {PLANS.map((plan) => (
+                <article
+                  key={plan.name}
+                  className={`${styles.plan} ${plan.featured ? styles.planFeatured : ""}`}
+                >
+                  <h3 className={styles.planName}>{plan.name}</h3>
+                  <div className={styles.planPrice}>
+                    <span className={styles.planAmount}>{plan.price}</span>
+                    <span className={styles.planCadence}>{plan.cadence}</span>
+                  </div>
+                  <p className={styles.planBlurb}>{plan.blurb}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className={styles.pricingCta}>
+              <a
+                className={styles.appStoreBadge}
+                href={APP_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download ClawCast on the App Store"
+              >
+                <img
+                  src="/app-store-badge.svg"
+                  alt="Download on the App Store"
+                  width={180}
+                  height={60}
+                />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <div className={shell.divider} />
+
+        <section className={shell.section} id="android">
+          <div className={`${shell.container} ${styles.androidStrip}`}>
+            <div>
+              <h2 className={styles.androidTitle}>On Android?</h2>
+              <p className={styles.androidBody}>
+                ClawCast is in closed alpha on Android. Join the waitlist and we&rsquo;ll let
+                you in as spots open.
+              </p>
+            </div>
+            {ANDROID_WAITLIST_FORM_URL ? (
+              <a
+                className={shell.btnPrimary}
+                href={ANDROID_WAITLIST_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Join the Android waitlist
+              </a>
+            ) : (
+              // TODO: set ANDROID_WAITLIST_FORM_URL in site-config.ts to enable this CTA.
+              <span className={styles.androidPending}>Waitlist opening soon</span>
+            )}
           </div>
         </section>
       </main>
