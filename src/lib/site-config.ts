@@ -28,7 +28,10 @@ export type Plan = {
   featured?: boolean;
 };
 
-// Don't change these numbers without checking the App Store listing.
+// Store prices are the source of truth, set via scripts/set_prices.py in the
+// Newsletter-pod repo (App Store Connect + Google Play). These website strings are a
+// MANUAL mirror — update them here whenever you run a price change, or they drift.
+// Current values match the 2026-06-11 cut (Apple effective 2026-06-15).
 export const PLANS: Plan[] = [
   {
     name: "Free",
@@ -39,16 +42,16 @@ export const PLANS: Plan[] = [
   },
   {
     name: "Pro",
-    price: "$19.99",
-    cadence: "/mo · $179.99/yr",
+    price: "$4.99",
+    cadence: "/mo · $44.99/yr",
     blurb:
       "The full source catalog, episodes up to 20 minutes, and delivery every day of the week.",
     featured: true,
   },
   {
     name: "Max",
-    price: "$29.99",
-    cadence: "/mo · $269.99/yr",
+    price: "$7.49",
+    cadence: "/mo · $66.99/yr",
     blurb:
       "Everything in Pro with the most headroom — for people who run several shows at once.",
   },
