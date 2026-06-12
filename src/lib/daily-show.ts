@@ -1,20 +1,35 @@
 // The public "daily show" demo — the short episode ClawCast generates every
-// morning and posts to X. We pull the latest item from its RSS feed at request
-// time (cached, revalidated periodically) so the homepage can play it.
+// morning and posts to X. The Newsletter-pod backend serves it as a public
+// podcast feed at `${NEWSLETTER_POD_URL}/broadcast/<loop_id>/feed.xml`; we pull
+// the latest item at request time (cached, revalidated periodically) so the
+// homepage can play it.
 //
 // Resilience is the whole point here: a dead or slow feed must never break the
 // page. Every failure path returns null, and the UI hides the player cleanly
 // when that happens.
 
-// TODO: set the public RSS feed URL of the daily demo show (the same episodes
-// posted to X). While empty, getLatestDailyEpisode() returns null and the
-// "Today's episode" module degrades to a follow-on-X prompt.
+// The broadcast loop_id whose episodes are the public daily show (the loop we
+// run for the X posts).
+export const DAILY_SHOW_LOOP_ID = "eu-morning";
+
+// Optional hard override. Leave empty to derive the feed URL from
+// NEWSLETTER_POD_URL + DAILY_SHOW_LOOP_ID (the normal path); set it only to
+// point at a feed hosted somewhere else.
 export const DAILY_SHOW_FEED_URL = "";
 
-// TODO: one-line description of what the daily show is built from, e.g.
-// "public tech and business feeds". While empty, the copy omits the
-// "built from …" clause rather than inventing sources.
-export const DAILY_SHOW_SOURCES = "";
+// One-line description of what the daily show is built from. Fills the copy
+// "ClawCast generates this short show every morning from ___."
+export const DAILY_SHOW_SOURCES = "its own curated feeds";
+
+// Resolves the feed URL: an explicit override wins; otherwise build it from the
+// backend base URL (same env var the admin pages use) and the loop_id. Returns
+// null when neither path is configured, so the module degrades cleanly.
+function resolveFeedUrl(): string | null {
+  if (DAILY_SHOW_FEED_URL) return DAILY_SHOW_FEED_URL;
+  const base = process.env.NEWSLETTER_POD_URL?.replace(/\/$/, "");
+  if (!base || !DAILY_SHOW_LOOP_ID) return null;
+  return `${base}/broadcast/${encodeURIComponent(DAILY_SHOW_LOOP_ID)}/feed.xml`;
+}
 
 // TODO (optional): subscribe links for the daily show itself (Apple Podcasts /
 // Spotify). Leave empty to show only the "follow along on X" link.
@@ -32,12 +47,13 @@ const REVALIDATE_SECONDS = 1800; // 30 minutes
 // Fetches and returns the most recent episode from the daily show feed, or null
 // if the feed is unset, unreachable, slow, or unparseable.
 export async function getLatestDailyEpisode(): Promise<DailyEpisode | null> {
-  if (!DAILY_SHOW_FEED_URL) return null;
+  const feedUrl = resolveFeedUrl();
+  if (!feedUrl) return null;
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
   try {
-    const res = await fetch(DAILY_SHOW_FEED_URL, {
+    const res = await fetch(feedUrl, {
       signal: controller.signal,
       next: { revalidate: REVALIDATE_SECONDS },
     });
