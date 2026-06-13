@@ -10,9 +10,11 @@ export const APP_STORE_URL =
 
 export const X_ACCOUNT_URL = "https://x.com/theclawcast_";
 
-// Mention a free trial in copy ONLY when this is true (the 7-day Pro trial has
-// actually shipped).
-export const FREE_TRIAL_LIVE = false;
+// Mention a free trial in copy ONLY when this is true. Shipped 2026-06-13:
+// every new listener gets a 7-day full-access (Max) trial granted server-side
+// at signup — no card required — then falls back to the free plan. This is a
+// backend entitlement, NOT an App Store intro offer.
+export const FREE_TRIAL_LIVE = true;
 
 // Android is in closed alpha. The only Android CTA anywhere is this waitlist
 // form — never a mailto.
@@ -53,6 +55,6 @@ export const PLANS: Plan[] = [
     price: "$7.49",
     cadence: "/mo · $66.99/yr",
     blurb:
-      "Everything in Pro with the most headroom — for people who run several shows at once.",
+      "Everything in Pro, plus room to run several shows at once.",
   },
 ];

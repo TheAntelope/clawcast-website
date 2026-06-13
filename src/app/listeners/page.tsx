@@ -3,7 +3,7 @@ import Link from "next/link";
 import { DailyEpisode } from "../_components/DailyEpisode";
 import { SiteFooter } from "../_components/SiteFooter";
 import { SiteHeader } from "../_components/SiteHeader";
-import { APP_STORE_URL, PLANS } from "@/lib/site-config";
+import { APP_STORE_URL, FREE_TRIAL_LIVE, PLANS } from "@/lib/site-config";
 import shell from "../_styles/shell.module.css";
 import styles from "./page.module.css";
 
@@ -87,7 +87,7 @@ export default function Listeners() {
               <li className={styles.feature}>
                 <h3 className={styles.featureTitle}>A feed that&rsquo;s actually yours</h3>
                 <p className={styles.featureBody}>
-                  Pick topics, paste RSS feeds, or forward newsletters to a private inbox
+                  Pick topics, paste RSS feeds, or subscribe newsletters to a private inbox
                   ClawCast gives you. Everything you subscribe to flows into one place.
                 </p>
               </li>
@@ -143,6 +143,13 @@ export default function Listeners() {
                 full source catalog, episodes up to 20 minutes, and delivery every day of the
                 week.
               </p>
+              {FREE_TRIAL_LIVE && (
+                <p className={shell.sectionLead}>
+                  Every new listener starts with a <strong>7-day free trial</strong> of full
+                  Max access — every premium voice, longer episodes, and daily delivery. No
+                  card required.
+                </p>
+              )}
             </div>
 
             <div className={styles.planGrid}>

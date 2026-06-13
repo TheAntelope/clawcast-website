@@ -5,6 +5,7 @@ import { SiteHeader } from "./_components/SiteHeader";
 import {
   ANDROID_WAITLIST_FORM_URL,
   APP_STORE_URL,
+  FREE_TRIAL_LIVE,
   PLANS,
 } from "@/lib/site-config";
 import shell from "./_styles/shell.module.css";
@@ -60,8 +61,8 @@ export default function Home() {
             <div className={shell.sectionHeader}>
               <h2 className={shell.sectionHeadline}>Three steps to your show.</h2>
               <p className={shell.sectionLead}>
-                Setup takes a couple of minutes. After that you don&rsquo;t need to open the
-                app — episodes show up wherever you already listen.
+                Setup takes a couple of minutes. After that you don&rsquo;t need to open
+                ClawCast again — finished episodes show up in Apple Podcasts on their own.
               </p>
             </div>
 
@@ -109,6 +110,13 @@ export default function Home() {
                 full source catalog, episodes up to 20 minutes, and delivery every day of the
                 week.
               </p>
+              {FREE_TRIAL_LIVE && (
+                <p className={shell.sectionLead}>
+                  Every new listener starts with a <strong>7-day free trial</strong> of full
+                  Max access — every premium voice, longer episodes, and daily delivery. No
+                  card required.
+                </p>
+              )}
             </div>
 
             <div className={styles.planGrid}>
