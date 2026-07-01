@@ -107,7 +107,7 @@ function readConfig(): { baseUrl: string; token: string } {
 }
 
 async function call<T>(
-  method: "GET" | "POST" | "DELETE",
+  method: "GET" | "POST" | "PUT" | "DELETE",
   path: string,
   body?: unknown,
 ): Promise<T> {
@@ -217,4 +217,125 @@ export async function pasteFeedback(
     `/jobs/broadcast/episodes/${encodeURIComponent(episodeId)}/feedback`,
     { feedback_text: feedbackText },
   );
+}
+
+// --- Podcast Shaping Studio (show blueprint) --------------------------------
+
+export type BlueprintDetailLevel = "headline" | "shallow" | "standard" | "deep";
+
+export type BlueprintSection = {
+  kind: string;
+  enabled: boolean;
+  detail_level: BlueprintDetailLevel;
+  target_words: number | null;
+  instructions: string | null;
+  max_blocks: number | null;
+};
+
+export type ShowBlueprint = {
+  sections: BlueprintSection[];
+  opening: {
+    intro_music_enabled: boolean;
+    intro_music_asset: string | null;
+  };
+  style: {
+    banned_phrases: string[];
+    positive_guidance: string | null;
+    lint_enabled: boolean;
+    max_rewrite_segments: number;
+  };
+  predictions: {
+    enabled: boolean;
+    max_mentions: number;
+    min_relevance: number;
+  };
+  music: {
+    outro_music_enabled: boolean;
+    outro_music_asset: string | null;
+    music_gain_db: number;
+    intro_bed_seconds: number;
+    fade_ms: number;
+  };
+  closing: {
+    announcements_text: string | null;
+    signoff_override: string | null;
+  };
+};
+
+export type BlueprintVersion = {
+  version: number;
+  blueprint: ShowBlueprint;
+  updated_at: string | null;
+  updated_by: string | null;
+  note: string | null;
+  is_default?: boolean;
+};
+
+export async function getBlueprint(): Promise<BlueprintVersion> {
+  return call<BlueprintVersion>("GET", "/jobs/config");
+}
+
+export async function putBlueprint(
+  blueprint: ShowBlueprint,
+  note?: string | null,
+): Promise<BlueprintVersion> {
+  return call<BlueprintVersion>("PUT", "/jobs/config", {
+    blueprint,
+    note: note ?? null,
+  });
+}
+
+export async function listBlueprintHistory(limit = 50): Promise<BlueprintVersion[]> {
+  const result = await call<{ versions: BlueprintVersion[] }>(
+    "GET",
+    `/jobs/config/history?limit=${limit}`,
+  );
+  return result.versions;
+}
+
+export async function restoreBlueprint(version: number): Promise<BlueprintVersion> {
+  return call<BlueprintVersion>("POST", "/jobs/config/restore", { version });
+}
+
+export type BlueprintPreview = {
+  episode_title: string;
+  transcript: string | null;
+  show_notes: string;
+  duration_seconds: number | null;
+  section_order: string[];
+  lint_hits: { segment_index: number; matched: string[] }[];
+  market_hints: string[];
+  text_only: boolean;
+};
+
+export async function previewBlueprint(
+  blueprint: ShowBlueprint,
+  textOnly = true,
+): Promise<BlueprintPreview> {
+  return call<BlueprintPreview>(
+    "POST",
+    `/jobs/config/preview?text_only=${textOnly ? "true" : "false"}`,
+    { blueprint },
+  );
+}
+
+export type GenerateUserResult = {
+  run?: { status?: string; message?: string | null };
+  episode?: { id?: string; title?: string };
+  feed_url?: string;
+  [key: string]: unknown;
+};
+
+// Runs the REAL per-user generation (publishes to that account's feed) so an
+// admin can hear the current global blueprint on their own pod.
+export async function generateUserPod(opts: {
+  userId?: string;
+  email?: string;
+  force?: boolean;
+}): Promise<GenerateUserResult> {
+  return call<GenerateUserResult>("POST", "/jobs/generate-user", {
+    user_id: opts.userId || null,
+    email: opts.email || null,
+    force: opts.force ?? true,
+  });
 }
