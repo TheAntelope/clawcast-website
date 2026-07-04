@@ -319,23 +319,47 @@ export async function previewBlueprint(
   );
 }
 
-export type GenerateUserResult = {
-  run?: { status?: string; message?: string | null };
-  episode?: { id?: string; title?: string };
-  feed_url?: string;
+export type PodRun = {
+  id?: string;
+  status?: string;
+  message?: string | null;
+  published_episode_id?: string | null;
   [key: string]: unknown;
 };
 
-// Runs the REAL per-user generation (publishes to that account's feed) so an
-// admin can hear the current global blueprint on their own pod.
-export async function generateUserPod(opts: {
+export type StartPodResult = {
+  user_id: string;
+  run: PodRun;
+  started: boolean;
+};
+
+export type PodStatusResult = {
+  run: PodRun;
+  episode?: { id?: string; title?: string };
+  feed_url?: string;
+};
+
+// Async, timeout-proof: start the real generation and return a run_id
+// immediately, then poll getUserPodStatus. A synchronous 1-2 min generation
+// through a serverless function times out ("status unknown"); this doesn't.
+export async function startUserPod(opts: {
   userId?: string;
   email?: string;
   force?: boolean;
-}): Promise<GenerateUserResult> {
-  return call<GenerateUserResult>("POST", "/jobs/generate-user", {
+}): Promise<StartPodResult> {
+  return call<StartPodResult>("POST", "/jobs/generate-user/start", {
     user_id: opts.userId || null,
     email: opts.email || null,
     force: opts.force ?? true,
   });
+}
+
+export async function getUserPodStatus(
+  userId: string,
+  runId: string,
+): Promise<PodStatusResult> {
+  return call<PodStatusResult>(
+    "GET",
+    `/jobs/generate-user/status?user_id=${encodeURIComponent(userId)}&run_id=${encodeURIComponent(runId)}`,
+  );
 }

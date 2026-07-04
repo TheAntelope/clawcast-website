@@ -1,15 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import type { GenerateUserResult } from "@/lib/newsletter-pod";
+import type { PodStatusResult, StartPodResult } from "@/lib/newsletter-pod";
 import styles from "../broadcast/admin.module.css";
 
 const STORAGE_KEY = "studio.generate.identifier";
+const POLL_MS = 4000;
+// Budget in SUCCESSFUL polls (~6 min of real generating time) — generous
+// because a durable background run can run long under load, and polling a
+// finished-but-slow run is near-free. Transient poll errors don't count against
+// this (they have their own small budget).
+const MAX_POLLS = 90;
+const MAX_POLL_ERRORS = 8; // give up only after this many consecutive poll failures
 
-// Derive the token-gated media URL from the returned feed_url + episode id:
-//   {base}/feeds/{token}.xml  ->  {base}/media/{token}/{episodeId}.mp3
-function deriveMediaUrl(result: GenerateUserResult | null): string | null {
+// A run is done when it reaches any of these; anything else (in_progress) keeps
+// polling.
+const TERMINAL = new Set([
+  "published",
+  "skipped",
+  "no_content",
+  "pre_access",
+  "failed",
+]);
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// {base}/feeds/{token}.xml -> {base}/media/{token}/{episodeId}.mp3
+function deriveMediaUrl(result: PodStatusResult | null): string | null {
   const feed = result?.feed_url;
   const epId = result?.episode?.id;
   if (!feed || !epId) return null;
@@ -21,17 +39,19 @@ function deriveMediaUrl(result: GenerateUserResult | null): string | null {
 export function GenerateMyPod() {
   const [identifier, setIdentifier] = useState("");
   const [busy, setBusy] = useState(false);
-  const [result, setResult] = useState<GenerateUserResult | null>(null);
+  const [statusText, setStatusText] = useState("");
+  const [result, setResult] = useState<PodStatusResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [timedOut, setTimedOut] = useState(false);
+  const cancelRef = useRef(false);
 
   useEffect(() => {
-    // Hydration-safe: render empty on the server, then populate from
-    // localStorage after mount (this is the documented pattern for a
-    // client-only persisted value, so the set-state-in-effect rule doesn't
-    // apply here).
     const saved = localStorage.getItem(STORAGE_KEY);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved) setIdentifier(saved);
+    return () => {
+      cancelRef.current = true;
+    };
   }, []);
 
   async function run() {
@@ -41,21 +61,70 @@ export function GenerateMyPod() {
       return;
     }
     localStorage.setItem(STORAGE_KEY, id);
+    cancelRef.current = false;
     setBusy(true);
     setError(null);
     setResult(null);
+    setTimedOut(false);
+    setStatusText("Starting…");
+
     try {
-      const res = await fetch("/admin/studio/generate", {
+      const startRes = await fetch("/admin/studio/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier: id }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(typeof data?.error === "string" ? data.error : "Generation failed");
-      } else {
-        setResult(data as GenerateUserResult);
+      const startData = await startRes.json();
+      if (!startRes.ok) {
+        setError(typeof startData?.error === "string" ? startData.error : "Could not start generation");
+        setBusy(false);
+        return;
       }
+      const { user_id: userId, run } = startData as StartPodResult;
+      const runId = run?.id;
+      if (!userId || !runId) {
+        setError("Backend did not return a run to track.");
+        setBusy(false);
+        return;
+      }
+
+      let current: PodStatusResult = { run };
+      setResult(current);
+      const started = Date.now();
+      let polls = 0;
+      let errors = 0;
+      while (
+        !TERMINAL.has(current.run?.status ?? "") &&
+        polls < MAX_POLLS &&
+        errors < MAX_POLL_ERRORS
+      ) {
+        await sleep(POLL_MS);
+        if (cancelRef.current) return;
+        setStatusText(`Generating your pod… (${Math.round((Date.now() - started) / 1000)}s)`);
+        let ok = false;
+        let sData: PodStatusResult | null = null;
+        try {
+          const sRes = await fetch(
+            `/admin/studio/generate/status?user_id=${encodeURIComponent(userId)}&run_id=${encodeURIComponent(runId)}`,
+          );
+          if (sRes.ok) {
+            sData = (await sRes.json()) as PodStatusResult;
+            ok = true;
+          }
+        } catch {
+          // network blip — treated as a transient error below
+        }
+        if (!ok || !sData) {
+          // Transient poll failure: don't burn the run-duration budget for it.
+          errors += 1;
+          continue;
+        }
+        errors = 0;
+        polls += 1;
+        current = sData;
+        setResult(current);
+      }
+      if (!TERMINAL.has(current.run?.status ?? "")) setTimedOut(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -63,17 +132,18 @@ export function GenerateMyPod() {
     }
   }
 
-  const mediaUrl = deriveMediaUrl(result);
   const status = result?.run?.status;
+  const message = (result?.run?.message as string | undefined) ?? "";
+  const mediaUrl = deriveMediaUrl(result);
 
   return (
     <div className={styles.tableWrap} style={{ padding: "1rem", marginBottom: "1.5rem" }}>
       <h2 className={styles.headerTitle}>Generate my pod (hear the current blueprint)</h2>
       <p className={styles.formHint}>
         Runs the real generation pipeline for your account with the currently
-        saved blueprint and publishes to your feed — so you hear the genuine
-        article, then tweak above and regenerate. Costs OpenAI/ElevenLabs and
-        takes a minute or two.
+        saved blueprint and publishes to your feed. Costs OpenAI/ElevenLabs and
+        takes a minute or two — it now runs in the background, so this won&apos;t
+        time out.
       </p>
       <div className={styles.formRow}>
         <label htmlFor="gen_identifier">Your email or user id</label>
@@ -83,37 +153,63 @@ export function GenerateMyPod() {
           value={identifier}
           onChange={(e) => setIdentifier(e.target.value)}
           placeholder="you@example.com"
+          disabled={busy}
         />
       </div>
       <div className={styles.formActions}>
-        <button
-          type="button"
-          className={styles.btnPrimary}
-          onClick={run}
-          disabled={busy}
-        >
-          {busy ? "Generating… (this can take a minute)" : "Generate & listen"}
+        <button type="button" className={styles.btnPrimary} onClick={run} disabled={busy}>
+          {busy ? statusText || "Generating…" : "Generate & listen"}
         </button>
       </div>
+
       {error && <div className={styles.notice}>{error}</div>}
-      {result && (
+
+      {result && !error && (
         <div style={{ marginTop: "0.75rem" }}>
-          <div className={styles.formHint}>
-            Status: <strong>{status ?? "unknown"}</strong>
-            {result.episode?.title ? ` · ${result.episode.title}` : ""}
-            {result?.run?.message ? ` · ${result.run.message}` : ""}
-          </div>
-          {mediaUrl && (
-            <audio controls src={mediaUrl} style={{ width: "100%", marginTop: "0.5rem" }}>
-              <track kind="captions" />
-            </audio>
+          {status === "published" && (
+            <>
+              <div className={styles.formHint}>
+                ✓ Published{result.episode?.title ? ` · ${result.episode.title}` : ""}
+              </div>
+              {mediaUrl && (
+                <audio controls src={mediaUrl} style={{ width: "100%", marginTop: "0.5rem" }}>
+                  <track kind="captions" />
+                </audio>
+              )}
+              {result.feed_url && (
+                <div className={styles.formHint} style={{ marginTop: "0.5rem" }}>
+                  Feed:{" "}
+                  <a href={result.feed_url} target="_blank" rel="noreferrer">
+                    {result.feed_url}
+                  </a>
+                </div>
+              )}
+            </>
           )}
-          {result.feed_url && (
-            <div className={styles.formHint} style={{ marginTop: "0.5rem" }}>
-              Feed:{" "}
-              <a href={result.feed_url} target="_blank" rel="noreferrer">
-                {result.feed_url}
-              </a>
+
+          {status === "skipped" && (
+            <div className={styles.notice}>
+              Skipped — {message || "no pod generated"}.
+            </div>
+          )}
+          {status === "no_content" && (
+            <div className={styles.notice}>
+              {message || "No new content to build a pod from right now."}
+            </div>
+          )}
+          {status === "pre_access" && (
+            <div className={styles.notice}>{message || "Account not eligible yet."}</div>
+          )}
+          {status === "failed" && (
+            <div className={styles.notice}>Failed — {message || "generation error"}.</div>
+          )}
+
+          {busy && !TERMINAL.has(status ?? "") && (
+            <div className={styles.formHint}>{statusText}</div>
+          )}
+          {timedOut && !TERMINAL.has(status ?? "") && (
+            <div className={styles.notice}>
+              Still generating — it&apos;ll land in your feed shortly.
             </div>
           )}
         </div>

@@ -3,28 +3,21 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   NewsletterPodApiError,
   NewsletterPodConfigError,
-  startUserPod,
+  getUserPodStatus,
 } from "@/lib/newsletter-pod";
 
-// Starting a run returns immediately (a run_id); the client then polls
-// /admin/studio/generate/status. No long-held connection, so no serverless
-// timeout.
+// Short, cheap poll of a run started via ../generate. The client hits this
+// every few seconds until the run reaches a terminal status.
 export const maxDuration = 30;
 
-export async function POST(req: NextRequest) {
-  let body: { identifier?: string };
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+export async function GET(req: NextRequest) {
+  const userId = req.nextUrl.searchParams.get("user_id")?.trim();
+  const runId = req.nextUrl.searchParams.get("run_id")?.trim();
+  if (!userId || !runId) {
+    return NextResponse.json({ error: "Missing user_id or run_id" }, { status: 400 });
   }
-  const identifier = (body.identifier ?? "").trim();
-  if (!identifier) {
-    return NextResponse.json({ error: "Enter your email or user id" }, { status: 400 });
-  }
-  const opts = identifier.includes("@") ? { email: identifier } : { userId: identifier };
   try {
-    return NextResponse.json(await startUserPod(opts));
+    return NextResponse.json(await getUserPodStatus(userId, runId));
   } catch (err) {
     if (err instanceof NewsletterPodConfigError) {
       return NextResponse.json({ error: err.message }, { status: 500 });
