@@ -306,16 +306,21 @@ export type BlueprintPreview = {
   lint_hits: { segment_index: number; matched: string[] }[];
   market_hints: string[];
   text_only: boolean;
+  // The account this preview was run as (email/id), and how many of its real
+  // source items were used. null/absent when previewing over sample stories.
+  previewed_as?: string | null;
+  source_item_count?: number;
 };
 
 export async function previewBlueprint(
   blueprint: ShowBlueprint,
-  textOnly = true,
+  opts: { textOnly?: boolean; email?: string | null; userId?: string | null } = {},
 ): Promise<BlueprintPreview> {
+  const textOnly = opts.textOnly ?? true;
   return call<BlueprintPreview>(
     "POST",
     `/jobs/config/preview?text_only=${textOnly ? "true" : "false"}`,
-    { blueprint },
+    { blueprint, user_id: opts.userId || null, email: opts.email || null },
   );
 }
 
