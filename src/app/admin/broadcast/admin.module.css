@@ -424,3 +424,39 @@
   color: var(--color-amber-deep, #b45309);
   border: 1px solid rgba(217, 119, 6, 0.2);
 }
+
+/* Podcast Shaping Studio: segments/editor (left) + transcript panel (right) */
+.studioSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .studioSplit {
+    grid-template-columns: 1fr;
+  }
+}
+
+.studioTranscript {
+  position: sticky;
+  top: 16px;
+  align-self: start;
+}
+
+.studioTranscriptHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.transcriptBox {
+  white-space: pre-wrap;
+  max-height: 70vh;
+  overflow: auto;
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+}

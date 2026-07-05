@@ -45,7 +45,7 @@ export default async function StudioPage({
   const saveError = flash(params, "save_error");
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} style={{ maxWidth: "1320px" }}>
       <header className={styles.header}>
         <h1 className={styles.headerTitle}>Podcast shaping studio</h1>
         <div className={styles.headerActions}>
