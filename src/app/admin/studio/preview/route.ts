@@ -11,7 +11,7 @@ import {
 // to. Runs the backend dry-run server-side (with the job token) and returns the
 // shaped script so the studio can show the effect before saving a version.
 export async function POST(req: NextRequest) {
-  let body: { blueprint?: ShowBlueprint; text_only?: boolean };
+  let body: { blueprint?: ShowBlueprint; text_only?: boolean; identifier?: string };
   try {
     body = await req.json();
   } catch {
@@ -20,8 +20,19 @@ export async function POST(req: NextRequest) {
   if (!body.blueprint) {
     return NextResponse.json({ error: "Missing blueprint" }, { status: 400 });
   }
+  // Preview AS the account the operator typed in the Generate panel, so it uses
+  // that user's real sources + profile. An "@" means email, otherwise a user id.
+  const identifier = (body.identifier ?? "").trim();
+  const who = identifier.includes("@")
+    ? { email: identifier }
+    : identifier
+      ? { userId: identifier }
+      : {};
   try {
-    const result = await previewBlueprint(body.blueprint, body.text_only ?? true);
+    const result = await previewBlueprint(body.blueprint, {
+      textOnly: body.text_only ?? true,
+      ...who,
+    });
     return NextResponse.json(result);
   } catch (err) {
     if (err instanceof NewsletterPodConfigError) {

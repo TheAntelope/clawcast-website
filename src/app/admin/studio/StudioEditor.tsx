@@ -32,10 +32,17 @@ export function StudioEditor({ initial }: Props) {
     setPreviewing(true);
     setPreviewError(null);
     try {
+      // Preview AS the same account typed into the "Generate my pod" panel
+      // (shared localStorage key), so it uses that user's real sources +
+      // profile. Empty -> the backend falls back to sample stories.
+      const identifier =
+        (typeof window !== "undefined" &&
+          localStorage.getItem("studio.generate.identifier")) ||
+        "";
       const res = await fetch("/admin/studio/preview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ blueprint: bp, text_only: true }),
+        body: JSON.stringify({ blueprint: bp, text_only: true, identifier }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -371,9 +378,18 @@ export function StudioEditor({ initial }: Props) {
               </button>
             </div>
             <p className={styles.formHint}>
-              Dry-runs this draft over sample stories (no TTS spend, saves
-              nothing) so you can read the resulting script.
+              Dry-runs this draft (no TTS spend, saves nothing) so you can read
+              the resulting script. Uses the sources + profile of the account in
+              the &ldquo;Generate my pod&rdquo; box above when one is set.
             </p>
+            {preview?.previewed_as && (
+              <div className={styles.formHint}>
+                Previewing as <strong>{preview.previewed_as}</strong>
+                {typeof preview.source_item_count === "number"
+                  ? ` · ${preview.source_item_count} source item(s)`
+                  : ""}
+              </div>
+            )}
 
             {previewError && <div className={styles.notice}>{previewError}</div>}
 
