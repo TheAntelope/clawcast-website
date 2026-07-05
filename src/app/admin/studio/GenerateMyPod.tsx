@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import type { PodStatusResult, StartPodResult } from "@/lib/newsletter-pod";
+import type {
+  LatestPodResult,
+  PodStatusResult,
+  StartPodResult,
+} from "@/lib/newsletter-pod";
 import styles from "../broadcast/admin.module.css";
 
 const STORAGE_KEY = "studio.generate.identifier";
@@ -27,7 +31,9 @@ const TERMINAL = new Set([
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // {base}/feeds/{token}.xml -> {base}/media/{token}/{episodeId}.mp3
-function deriveMediaUrl(result: PodStatusResult | null): string | null {
+function deriveMediaUrl(
+  result: { episode?: { id?: string } | null; feed_url?: string | null } | null,
+): string | null {
   const feed = result?.feed_url;
   const epId = result?.episode?.id;
   if (!feed || !epId) return null;
@@ -41,6 +47,7 @@ export function GenerateMyPod() {
   const [busy, setBusy] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [result, setResult] = useState<PodStatusResult | null>(null);
+  const [latest, setLatest] = useState<LatestPodResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [timedOut, setTimedOut] = useState(false);
   const cancelRef = useRef(false);
@@ -65,6 +72,7 @@ export function GenerateMyPod() {
     setBusy(true);
     setError(null);
     setResult(null);
+    setLatest(null);
     setTimedOut(false);
     setStatusText("Starting…");
 
@@ -125,6 +133,22 @@ export function GenerateMyPod() {
         setResult(current);
       }
       if (!TERMINAL.has(current.run?.status ?? "")) setTimedOut(true);
+
+      // No fresh pod (no new content / skipped / still running) — fall back to
+      // the account's most recent existing pod so there's something to play.
+      if (current.run?.status !== "published") {
+        try {
+          const lRes = await fetch(
+            `/admin/studio/generate/latest?user_id=${encodeURIComponent(userId)}`,
+          );
+          if (lRes.ok) {
+            const lData = (await lRes.json()) as LatestPodResult;
+            if (!cancelRef.current && lData?.episode?.id) setLatest(lData);
+          }
+        } catch {
+          // best-effort — the reason message still shows
+        }
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -135,6 +159,7 @@ export function GenerateMyPod() {
   const status = result?.run?.status;
   const message = (result?.run?.message as string | undefined) ?? "";
   const mediaUrl = deriveMediaUrl(result);
+  const latestMediaUrl = deriveMediaUrl(latest);
 
   return (
     <div className={styles.tableWrap} style={{ padding: "1rem", marginBottom: "1.5rem" }}>
@@ -202,6 +227,28 @@ export function GenerateMyPod() {
           )}
           {status === "failed" && (
             <div className={styles.notice}>Failed — {message || "generation error"}.</div>
+          )}
+
+          {status !== "published" && latest?.episode?.id && (
+            <div style={{ marginTop: "0.5rem" }}>
+              <div className={styles.formHint}>
+                Here&apos;s your most recent pod
+                {latest.episode.title ? `: ${latest.episode.title}` : ""}.
+              </div>
+              {latestMediaUrl && (
+                <audio controls src={latestMediaUrl} style={{ width: "100%", marginTop: "0.5rem" }}>
+                  <track kind="captions" />
+                </audio>
+              )}
+              {latest.feed_url && (
+                <div className={styles.formHint} style={{ marginTop: "0.5rem" }}>
+                  Feed:{" "}
+                  <a href={latest.feed_url} target="_blank" rel="noreferrer">
+                    {latest.feed_url}
+                  </a>
+                </div>
+              )}
+            </div>
           )}
 
           {busy && !TERMINAL.has(status ?? "") && (

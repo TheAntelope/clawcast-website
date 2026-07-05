@@ -363,3 +363,22 @@ export async function getUserPodStatus(
     `/jobs/generate-user/status?user_id=${encodeURIComponent(userId)}&run_id=${encodeURIComponent(runId)}`,
   );
 }
+
+export type LatestPodResult = {
+  episode: {
+    id?: string;
+    title?: string;
+    published_at?: string;
+    duration_seconds?: number | null;
+  } | null;
+  feed_url?: string | null;
+};
+
+// The account's most recent already-published pod — used as a fallback to play
+// when a fresh generation has no new content.
+export async function getLatestUserPod(userId: string): Promise<LatestPodResult> {
+  return call<LatestPodResult>(
+    "GET",
+    `/jobs/generate-user/latest?user_id=${encodeURIComponent(userId)}`,
+  );
+}
