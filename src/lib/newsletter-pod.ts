@@ -340,7 +340,9 @@ export type StartPodResult = {
 
 export type PodStatusResult = {
   run: PodRun;
-  episode?: { id?: string; title?: string };
+  // transcript_text is the aired script, so the Studio can show text matching
+  // the pod's audio.
+  episode?: { id?: string; title?: string; transcript_text?: string | null };
   feed_url?: string;
 };
 
@@ -351,11 +353,16 @@ export async function startUserPod(opts: {
   userId?: string;
   email?: string;
   force?: boolean;
+  // Optional candidate blueprint — the Studio's "regenerate with these edits"
+  // sends the unsaved draft so the REAL pod (audio + intro/outro music) is built
+  // from it, without saving anything globally. Omit to use the saved blueprint.
+  blueprint?: ShowBlueprint | null;
 }): Promise<StartPodResult> {
   return call<StartPodResult>("POST", "/jobs/generate-user/start", {
     user_id: opts.userId || null,
     email: opts.email || null,
     force: opts.force ?? true,
+    blueprint: opts.blueprint ?? null,
   });
 }
 
@@ -375,15 +382,20 @@ export type LatestPodResult = {
     title?: string;
     published_at?: string;
     duration_seconds?: number | null;
+    transcript_text?: string | null;
   } | null;
   feed_url?: string | null;
 };
 
-// The account's most recent already-published pod — used as a fallback to play
-// when a fresh generation has no new content.
-export async function getLatestUserPod(userId: string): Promise<LatestPodResult> {
-  return call<LatestPodResult>(
-    "GET",
-    `/jobs/generate-user/latest?user_id=${encodeURIComponent(userId)}`,
-  );
+// The account's most recent already-published pod — used both to seed the
+// Studio baseline and as a fallback when a fresh generation has no new content.
+// Accepts a user id or an email (the backend resolves the email server-side).
+export async function getLatestUserPod(opts: {
+  userId?: string;
+  email?: string;
+}): Promise<LatestPodResult> {
+  const query = opts.userId
+    ? `user_id=${encodeURIComponent(opts.userId)}`
+    : `email=${encodeURIComponent(opts.email ?? "")}`;
+  return call<LatestPodResult>("GET", `/jobs/generate-user/latest?${query}`);
 }

@@ -4,6 +4,7 @@ import {
   NewsletterPodApiError,
   NewsletterPodConfigError,
   startUserPod,
+  type ShowBlueprint,
 } from "@/lib/newsletter-pod";
 
 // Starting a run returns immediately (a run_id); the client then polls
@@ -12,7 +13,7 @@ import {
 export const maxDuration = 30;
 
 export async function POST(req: NextRequest) {
-  let body: { identifier?: string };
+  let body: { identifier?: string; blueprint?: ShowBlueprint | null };
   try {
     body = await req.json();
   } catch {
@@ -22,7 +23,11 @@ export async function POST(req: NextRequest) {
   if (!identifier) {
     return NextResponse.json({ error: "Enter your email or user id" }, { status: 400 });
   }
-  const opts = identifier.includes("@") ? { email: identifier } : { userId: identifier };
+  // A blueprint present means "regenerate with these edits" (the draft renders
+  // for real); absent means generate with the saved/global blueprint. The
+  // backend validates the draft and 400s a malformed one.
+  const who = identifier.includes("@") ? { email: identifier } : { userId: identifier };
+  const opts = { ...who, blueprint: body.blueprint ?? null };
   try {
     return NextResponse.json(await startUserPod(opts));
   } catch (err) {
