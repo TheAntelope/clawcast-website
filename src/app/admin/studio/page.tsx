@@ -8,8 +8,7 @@ import {
 } from "@/lib/newsletter-pod";
 import styles from "../broadcast/admin.module.css";
 import { saveBlueprintAction, restoreBlueprintAction } from "./actions";
-import { StudioEditor } from "./StudioEditor";
-import { GenerateMyPod } from "./GenerateMyPod";
+import { StudioWorkspace } from "./StudioWorkspace";
 
 export const dynamic = "force-dynamic";
 
@@ -69,11 +68,9 @@ export default async function StudioPage({
       {saveSuccess && <div className={styles.notice}>{saveSuccess}</div>}
       {saveError && <div className={styles.notice}>{saveError}</div>}
 
-      {!error && <GenerateMyPod />}
-
       {!error && active && (
         <form action={saveBlueprintAction} className={styles.form}>
-          <StudioEditor initial={active.blueprint} />
+          <StudioWorkspace initial={active.blueprint} />
           <div className={styles.formRow}>
             <label htmlFor="note">Change note (optional)</label>
             <input id="note" name="note" type="text" placeholder="e.g. drop weather, add markets" />

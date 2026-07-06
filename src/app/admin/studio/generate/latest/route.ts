@@ -11,12 +11,17 @@ export const maxDuration = 30;
 // Returns the account's most recent published pod, used as a fallback player
 // when a fresh generation has no new content.
 export async function GET(req: NextRequest) {
+  // Accept either a resolved user_id (the generation fallback path) or a raw
+  // identifier (the on-mount baseline seed, which may be an email).
   const userId = req.nextUrl.searchParams.get("user_id")?.trim();
-  if (!userId) {
-    return NextResponse.json({ error: "Missing user_id" }, { status: 400 });
+  const identifier = req.nextUrl.searchParams.get("identifier")?.trim();
+  const id = userId || identifier;
+  if (!id) {
+    return NextResponse.json({ error: "Missing user_id or identifier" }, { status: 400 });
   }
+  const opts = id.includes("@") ? { email: id } : { userId: id };
   try {
-    return NextResponse.json(await getLatestUserPod(userId));
+    return NextResponse.json(await getLatestUserPod(opts));
   } catch (err) {
     if (err instanceof NewsletterPodConfigError) {
       return NextResponse.json({ error: err.message }, { status: 500 });
