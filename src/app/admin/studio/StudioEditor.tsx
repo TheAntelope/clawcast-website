@@ -137,6 +137,38 @@ export function StudioEditor({ bp, update }: Props) {
       </div>
 
       <h2 className={styles.headerTitle} style={{ marginTop: "1.5rem" }}>
+        Script model (experiment)
+      </h2>
+      <p className={styles.formHint}>
+        The OpenAI model that writes the transcript (main script, closing, and
+        the de-AI rewrite). Leave blank for the deployed default. Pick a
+        suggestion or type any valid OpenAI model id, then use{" "}
+        <strong>Draft preview</strong> / <strong>Regenerate with my edits</strong>{" "}
+        to compare transcripts. Saving a version makes the chosen model global.
+      </p>
+      <div className={styles.formRow}>
+        <label htmlFor="text_model">Model</label>
+        <input
+          id="text_model"
+          type="text"
+          list="studio-model-suggestions"
+          placeholder="default (gpt-5.4-mini)"
+          value={bp.text_model ?? ""}
+          onChange={(e) => update((d) => (d.text_model = e.target.value.trim() || null))}
+        />
+        <datalist id="studio-model-suggestions">
+          <option value="gpt-5.4-mini" />
+          <option value="gpt-5.4" />
+          <option value="gpt-4o" />
+          <option value="gpt-4o-mini" />
+        </datalist>
+        <div className={styles.formHint}>
+          Blank = deployed default. An unknown model id fails loudly at generate
+          time, never silently.
+        </div>
+      </div>
+
+      <h2 className={styles.headerTitle} style={{ marginTop: "1.5rem" }}>
         Intro music
       </h2>
       <p className={styles.formHint}>

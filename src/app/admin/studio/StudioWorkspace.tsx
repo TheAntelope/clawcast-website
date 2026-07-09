@@ -529,6 +529,7 @@ export function StudioWorkspace({ initial }: Props) {
                       {preview.episode_title} · sections:{" "}
                       {preview.section_order.join(" → ") || "—"} · ~
                       {preview.duration_seconds ?? "?"}s
+                      {preview.text_model ? ` · model: ${preview.text_model}` : ""}
                       {previewing ? " · updating…" : ""}
                     </div>
                     {preview.lint_hits.length > 0 && (
