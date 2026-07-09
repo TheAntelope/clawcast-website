@@ -260,6 +260,9 @@ export type ShowBlueprint = {
     announcements_text: string | null;
     signoff_override: string | null;
   };
+  // OpenAI model for script generation. null -> deployed default. Lets the
+  // Studio A/B models for transcript quality.
+  text_model: string | null;
 };
 
 export type BlueprintVersion = {
@@ -310,6 +313,8 @@ export type BlueprintPreview = {
   // source items were used. null/absent when previewing over sample stories.
   previewed_as?: string | null;
   source_item_count?: number;
+  // The OpenAI model that produced this script (draft override or default).
+  text_model?: string | null;
 };
 
 export async function previewBlueprint(
